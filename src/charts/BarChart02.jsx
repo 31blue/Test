@@ -12,6 +12,8 @@ import { formatValue } from '../utils/Utils';
 
 Chart.register(BarController, BarElement, LinearScale, TimeScale, Tooltip, Legend);
 
+const a = 4
+
 function BarChart02({
   data,
   width,
