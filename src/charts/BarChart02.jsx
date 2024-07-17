@@ -12,7 +12,7 @@ import { formatValue } from '../utils/Utils';
 
 Chart.register(BarController, BarElement, LinearScale, TimeScale, Tooltip, Legend);
 
-const a = 5
+const a = 6
 
 function BarChart02({
   data,
