@@ -6,7 +6,7 @@ import RealtimeChart from '../../charts/RealtimeChart';
 // Import utilities
 import { tailwindConfig, hexToRGB } from '../../utils/Utils';
 
-function DashboardCard05() {
+function CurrentHumidity() {
 
   // IMPORTANT:
   // Code below is for demo purpose only, and it's not covered by support.
@@ -108,4 +108,4 @@ function DashboardCard05() {
   );
 }
 
-export default DashboardCard05;
+export default CurrentHumidity;

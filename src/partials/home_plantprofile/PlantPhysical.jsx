@@ -1,12 +1,12 @@
 import React from 'react';
 
-function DashboardCardPlantPhysical({ height, leafCount, leafArea }) {
+function PlantPhysical({ height, leafCount, leafArea }) {
   // 기본값 설정
   const displayHeight = height || '10cm';
   const displayLeafCount = leafCount || 2;
   const displayLeafArea = leafArea || '10cm²';
 
-  console.log('DashboardCardPlantPhysical', { 
+  console.log('PlantPhysical', { 
     height: displayHeight, 
     leafCount: displayLeafCount, 
     leafArea: displayLeafArea 
@@ -35,4 +35,4 @@ function DashboardCardPlantPhysical({ height, leafCount, leafArea }) {
   );
 }
 
-export default DashboardCardPlantPhysical;
+export default PlantPhysical;

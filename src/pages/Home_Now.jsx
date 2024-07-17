@@ -6,8 +6,8 @@ import FilterButton from '../components/DropdownFilter';
 import Datepicker from '../components/Datepicker';
 
 
-import DashboardCard05 from '../partials/home_now/DashboardCard05';
-import DashboardCard06 from '../partials/home_now/DashboardCard06';
+import CurrentTemperature from '../partials/home_now/CurrentTemperature';
+import CurrentHumidity from '../partials/home_now/CurrentHumidity';
 
 
 import Banner from '../partials/Banner';
@@ -61,9 +61,9 @@ function Dashboard() {
 
 
               {/* Line chart (Real Time Value) */}
-              <DashboardCard05 />
+              <CurrentTemperature />
               {/* Doughnut chart (Top Countries) */}
-              <DashboardCard06 />
+              <CurrentHumidity />
 
               
             </div>

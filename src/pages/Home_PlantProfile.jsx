@@ -5,10 +5,10 @@ import Header from '../partials/Header';
 import FilterButton from '../components/DropdownFilter';
 import Datepicker from '../components/Datepicker';
 
-import DashboardCardPlantProfile from '../partials/home_plantprofile/DashboardCardPlantProfile';
-import DashboardCardPlantSpecies from '../partials/home_plantprofile/DashboardCardPlantSpecies';
-import DashboardCardPlantRegistration from '../partials/home_plantprofile/DashboardCardPlantRegistration';
-import DashboardCardPlantPhysical from '../partials/home_plantprofile/DashboardCardPlantPhysical';
+import PlantProfile from '../partials/home_plantprofile/PlantProfile';
+import PlantRegistration from '../partials/home_plantprofile/PlantRegistration';
+import PlantSpecies from '../partials/home_plantprofile/PlantSpecies';
+import PlantPhysical from '../partials/home_plantprofile/PlantPhysical';
 
 import Banner from '../partials/Banner';
 
@@ -60,11 +60,10 @@ function Dashboard() {
 
             {/* Cards */}
             <div className="grid grid-cols-12 gap-6">
-              <DashboardCardPlantProfile image={plantData.image} name={plantData.name} />
-              <DashboardCardPlantSpecies species={plantData.species} />
-              <DashboardCardPlantRegistration date={plantData.registrationDate} />
-              <DashboardCardPlantPhysical 
-                name={plantData.name}
+              <PlantProfile image={plantData.image} name={plantData.name} />
+              <PlantSpecies species={plantData.species} />
+              <PlantRegistration date={plantData.registrationDate} />
+              <PlantPhysical
                 height={plantData.height}
                 leafCount={plantData.leafCount}
                 leafArea={plantData.leafArea}

@@ -6,7 +6,12 @@ import Header from '../partials/Header';
 import FilterButton from '../components/DropdownFilter';
 import Datepicker from '../components/Datepicker';
 
-import DashboardCardAlbum from '../partials/album/DashboardCardAlbum';
+import Album01 from '../partials/album/Album01';
+import Album02 from '../partials/album/Album02';
+import Album03 from '../partials/album/Album03';
+import Album04 from '../partials/album/Album04';
+import Album05 from '../partials/album/Album05';
+
 import Banner from '../partials/Banner';
 
 function Dashboard() {
@@ -50,7 +55,12 @@ function Dashboard() {
             {/* Cards */}
             <div className="grid grid-cols-12 gap-6">
               {/* Card (Album) */}
-              <DashboardCardAlbum startIndex={0} />
+              <Album01 startIndex={0} />
+              <Album02 startIndex={1} />
+              <Album03 startIndex={2} />
+              <Album04 startIndex={3} />
+              <Album05 startIndex={4} />
+
             </div>
           </div>
         </main>

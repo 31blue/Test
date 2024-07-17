@@ -1,5 +1,3 @@
-// C:\Users\user\tailwind-dashboard-template-main\src\pages\Analysis_Summary.jsx
-
 import React, { useState } from 'react';
 
 import Sidebar from '../partials/Sidebar';
@@ -7,10 +5,10 @@ import Header from '../partials/Header';
 import FilterButton from '../components/DropdownFilter';
 import Datepicker from '../components/Datepicker';
 
-import DashboardCard08 from '../partials/analysis_summary/DashboardCard08';
-import DashboardCard09 from '../partials/analysis_summary/DashboardCard09';
-import DashboardCard10 from '../partials/analysis_summary/DashboardCard10';
-//import SummaryEvaluation from '../partials/analysis_summary/SummaryEvaluation';
+import WeeklyPatterns from '../partials/analysis_summary/WeeklyPatterns';
+import GrowthChart from '../partials/analysis_summary/GrowthChart';
+import SummaryEvaluation from '../partials/analysis_summary/SummaryEvaluation';
+
 
 import Banner from '../partials/Banner';
 
@@ -47,17 +45,17 @@ function Analysis_Summary() {
                     <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
                   </svg>
                   <span className="max-xs:sr-only">Add View</span>
-                </button>                
+                </button>
               </div>
             </div>
             {/* Cards */}
             <div className="grid grid-cols-12 gap-6">
               {/* Line chart (Sales Over Time) */}
-              <DashboardCard08 />
+              <WeeklyPatterns />
               {/* Stacked bar chart (Sales VS Refunds) */}
-              <DashboardCard09 />
+              <GrowthChart />
               {/* Evaluation Card */}
-              <DashboardCard10 />
+              <SummaryEvaluation />
             </div>
           </div>
         </main>

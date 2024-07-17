@@ -1,7 +1,7 @@
 import React from 'react';
 import defaultImage from '../../images/album/michael-benz--IZ2sgQKIhM-unsplash.jpg';
 
-function DashboardCardPlantProfile({ image, name }) {
+function PlantProfile({ image, name }) {
   console.log('DashboardCardPlantProfile', { image, name });
 
   const [imgSrc, setImgSrc] = React.useState(image || defaultImage);
@@ -30,4 +30,4 @@ function DashboardCardPlantProfile({ image, name }) {
   );
 }
 
-export default DashboardCardPlantProfile;
+export default PlantProfile;

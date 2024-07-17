@@ -12,7 +12,7 @@ const images = [
   // 필요한 경우, 더 많은 이미지를 추가할 수 있습니다.
 ];
 
-function DashboardCardAlbum({ startIndex }) {
+function Album04({ startIndex }) {
   const displayedImages = images.slice(startIndex, startIndex + 4);
 
   return (
@@ -32,4 +32,4 @@ function DashboardCardAlbum({ startIndex }) {
   );
 }
 
-export default DashboardCardAlbum;
+export default Album04;

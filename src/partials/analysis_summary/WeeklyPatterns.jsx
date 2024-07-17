@@ -5,7 +5,7 @@ import LineChart from '../../charts/LineChart02';
 // Import utilities
 import { tailwindConfig } from '../../utils/Utils';
 
-function DashboardCard08() {
+function WeeklyPatterns() {
 
   const chartData = {
     labels: [
@@ -91,7 +91,7 @@ function DashboardCard08() {
   return (
     <div className="flex flex-col col-span-full sm:col-span-6 bg-white dark:bg-gray-800 shadow-sm rounded-xl">
       <header className="px-5 py-4 border-b border-gray-100 dark:border-gray-700/60 flex items-center">
-        <h2 className="font-semibold text-gray-800 dark:text-gray-100">광합성량과 증발산량 추이</h2>
+        <h2 className="font-semibold text-gray-800 dark:text-gray-100">광합성량과 증발산량 추이 (일주일)</h2>
       </header>
       {/* Chart built with Chart.js 3 */}
       {/* Change the height attribute to adjust the chart height */}
@@ -100,4 +100,4 @@ function DashboardCard08() {
   );
 }
 
-export default DashboardCard08;
+export default WeeklyPatterns;

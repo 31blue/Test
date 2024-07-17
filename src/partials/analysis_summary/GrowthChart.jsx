@@ -5,7 +5,7 @@ import BarChart from '../../charts/BarChart02';
 // Import utilities
 import { tailwindConfig } from '../../utils/Utils';
 
-function DashboardCard09() {
+function GrowthChart() {
 
   const chartData = {
     labels: [
@@ -63,4 +63,4 @@ function DashboardCard09() {
   );
 }
 
-export default DashboardCard09;
+export default GrowthChart;

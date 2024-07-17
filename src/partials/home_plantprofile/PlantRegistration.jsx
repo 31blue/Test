@@ -1,6 +1,6 @@
 import React from 'react';
 
-function DashboardCardPlantRegistration({ date }) {
+function PlantRegistration({ date }) {
   // Use the provided date or default to '2024-08-07' if it's undefined or an empty string
   const displayDate = date && date.trim() !== '' ? date : '2024-08-07';
 
@@ -16,4 +16,4 @@ function DashboardCardPlantRegistration({ date }) {
   );
 }
 
-export default DashboardCardPlantRegistration;
+export default PlantRegistration;

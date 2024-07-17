@@ -1,6 +1,6 @@
 import React from 'react';
 
-function DashboardCardPlantSpecies({ species }) {
+function PlantSpecies({ species }) {
   // Use the provided species or default to '바질' if it's undefined or an empty string
   const displaySpecies = species && species.trim() !== '' ? species : '바질';
 
@@ -16,4 +16,4 @@ function DashboardCardPlantSpecies({ species }) {
   );
 }
 
-export default DashboardCardPlantSpecies;
+export default PlantSpecies;
