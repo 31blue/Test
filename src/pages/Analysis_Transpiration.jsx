@@ -26,10 +26,7 @@ function Analysis_Evapotranspiration() {
               <div className="mb-4 sm:mb-0">
                 <h1 className="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">증발산량 분석</h1>
               </div>
-              <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-                <FilterButton align="right" />
-                <Datepicker align="right" />
-              </div>
+
             </div>
             <div className="grid grid-cols-12 gap-6">
               <DailyEvapotranspiration />

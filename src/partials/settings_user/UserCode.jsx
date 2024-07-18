@@ -1,6 +1,6 @@
 import React from 'react';
 
-function DashboardCard01({ species }) {
+function UserCode({ species }) {
   // Use the provided species or default to '바질' if it's undefined or an empty string
   const displaySpecies = species && species.trim() !== '' ? species : 'user01';
 
@@ -16,4 +16,4 @@ function DashboardCard01({ species }) {
   );
 }
 
-export default DashboardCard01;
+export default UserCode;

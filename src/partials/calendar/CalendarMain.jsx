@@ -1,7 +1,7 @@
 // src/partials/dashboard/DashboardCardCalendar.jsx
 import React from 'react';
 
-function DashboardCardCalendar({ month, year }) {
+function CalendarMain({ month, year }) {
   // 해당 월의 첫 날짜와 마지막 날짜를 구합니다.
   const firstDay = new Date(year, month, 1);
   const lastDay = new Date(year, month + 1, 0);
@@ -49,4 +49,4 @@ function DashboardCardCalendar({ month, year }) {
   );
 }
 
-export default DashboardCardCalendar;
+export default CalendarMain;

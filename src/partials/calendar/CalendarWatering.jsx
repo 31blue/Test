@@ -12,13 +12,13 @@ const images = [
   // 필요한 경우, 더 많은 이미지를 추가할 수 있습니다.
 ];
 
-function DashboardCardAlbum({ startIndex }) {
+function CalendarWatering({ startIndex }) {
   const displayedImages = images.slice(startIndex, startIndex + 4);
 
   return (
     <div className="col-span-full xl:col-span-6 bg-white dark:bg-gray-800 shadow-sm rounded-xl">
       <header className="px-5 py-4 border-b border-gray-100 dark:border-gray-700/60">
-        <h2 className="font-semibold text-gray-800 dark:text-gray-100">07.16</h2>
+        <h2 className="font-semibold text-gray-800 dark:text-gray-100">물주기</h2>
       </header>
       <div className="p-3 grid grid-cols-2 gap-4">
         {/* 앨범 사진들 */}
@@ -32,4 +32,4 @@ function DashboardCardAlbum({ startIndex }) {
   );
 }
 
-export default DashboardCardAlbum;
+export default CalendarWatering;
