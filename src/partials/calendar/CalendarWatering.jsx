@@ -1,32 +1,41 @@
-// src/partials/album/DashboardCardAlbum.jsx
 import React from 'react';
 
-import img1 from '../../images/album/60048_57590_3014.jpg';
-import img2 from '../../images/album/chris-barbalis-oOBMoCOgGrY-unsplash.jpg';
-import img3 from '../../images/album/creative-christians-v5kSQq-6HZQ-unsplash.jpg';
+function CalendarWatering({ wateredDates }) {
+  const currentDate = new Date();
+  const lastWateredDate = wateredDates
+    .map(dateString => new Date(dateString))
+    .filter(date => date <= currentDate)
+    .sort((a, b) => b - a)[0];
 
-const images = [
-  img1,
-  img2,
-  img3,
-  // 필요한 경우, 더 많은 이미지를 추가할 수 있습니다.
-];
+  const getDaysSinceWatering = () => {
+    if (!lastWateredDate) return null;
+    const diffTime = Math.abs(currentDate - lastWateredDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
 
-function CalendarWatering({ startIndex }) {
-  const displayedImages = images.slice(startIndex, startIndex + 4);
+  const daysSinceWatering = getDaysSinceWatering();
 
   return (
-    <div className="col-span-full xl:col-span-6 bg-white dark:bg-gray-800 shadow-sm rounded-xl">
-      <header className="px-5 py-4 border-b border-gray-100 dark:border-gray-700/60">
-        <h2 className="font-semibold text-gray-800 dark:text-gray-100">물주기</h2>
+    <div className="col-span-full xl:col-span-4 bg-white shadow-lg rounded-sm border border-slate-200">
+      <header className="px-5 py-4 border-b border-slate-100">
+        <h2 className="font-semibold text-slate-800">물주기</h2>
       </header>
-      <div className="p-3 grid grid-cols-2 gap-4">
-        {/* 앨범 사진들 */}
-        {displayedImages.map((image, index) => (
-          <div key={index} className="w-full h-32 bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden flex items-center justify-center">
-            <img src={image} alt={`사진 ${startIndex + index + 1}`} className="w-full h-full object-cover"/>
+      <div className="p-3">
+        {daysSinceWatering !== null ? (
+          <div className="text-3xl font-bold text-sky-500 mb-1">
+            D+{daysSinceWatering}
           </div>
-        ))}
+        ) : (
+          <div className="text-xl text-slate-500">
+            물주기 기록이 없습니다.
+          </div>
+        )}
+        <div className="text-sm text-slate-500">
+          {lastWateredDate
+            ? `마지막 물주기: ${lastWateredDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}`
+            : '아직 물주기 기록이 없습니다.'}
+        </div>
       </div>
     </div>
   );

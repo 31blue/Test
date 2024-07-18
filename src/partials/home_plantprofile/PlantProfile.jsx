@@ -1,14 +1,24 @@
-import React from 'react';
+//C:\Users\user\tailwind-dashboard-template-main\src\partials\home_plantprofile\PlantProfile.jsx
+import React, { useState } from 'react';
 import defaultImage from '../../images/album/michael-benz--IZ2sgQKIhM-unsplash.jpg';
 
-function PlantProfile({ image, name }) {
-  console.log('DashboardCardPlantProfile', { image, name });
-
-  const [imgSrc, setImgSrc] = React.useState(image || defaultImage);
+function PlantProfile({ image, initialName = '바질01' }) {
+  console.log('DashboardCardPlantProfile', { image, initialName });
+  const [imgSrc, setImgSrc] = useState(image || defaultImage);
+  const [name, setName] = useState(initialName);
+  const [isEditing, setIsEditing] = useState(false);
 
   const onError = () => {
     console.log('Image failed to load, using default image');
     setImgSrc(defaultImage);
+  };
+
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+  };
+
+  const toggleEdit = () => {
+    setIsEditing(!isEditing);
   };
 
   return (
@@ -23,7 +33,23 @@ function PlantProfile({ image, name }) {
               onError={onError}
             />
           </div>
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">{name}</h1>
+          {isEditing ? (
+            <input
+              type="text"
+              value={name}
+              onChange={handleNameChange}
+              className="text-2xl font-bold text-gray-800 dark:text-gray-100 text-center mb-2"
+              autoFocus
+            />
+          ) : (
+            <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">{name}</h1>
+          )}
+          <button
+            onClick={toggleEdit}
+            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+          >
+            {isEditing ? '저장' : '이름 수정'}
+          </button>
         </div>
       </div>
     </div>

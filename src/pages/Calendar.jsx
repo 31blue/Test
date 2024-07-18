@@ -1,64 +1,62 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
 import Sidebar from '../partials/Sidebar';
 import Header from '../partials/Header';
-import FilterButton from '../components/DropdownFilter';
-import Datepicker from '../components/Datepicker';
 import CalendarMain from '../partials/calendar/CalendarMain';
 import CalendarWatering from '../partials/calendar/CalendarWatering';
-
 import CalendarFlower from '../partials/calendar/CalendarFlower';
-
 import Banner from '../partials/Banner';
 
 function Dashboard() {
-
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [wateredDates, setWateredDates] = useState([]);
+  const [floweringDates, setFloweringDates] = useState([]);
+  const [currentDate, setCurrentDate] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentDate(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const handleWatering = (date) => {
+    const dateString = date.toDateString();
+    if (wateredDates.includes(dateString)) {
+      setWateredDates(wateredDates.filter(d => d !== dateString));
+    } else {
+      setWateredDates([...wateredDates, dateString]);
+    }
+  };
+
+  const handleFlowering = (date) => {
+    const dateString = date.toDateString();
+    if (floweringDates.includes(dateString)) {
+      setFloweringDates(floweringDates.filter(d => d !== dateString));
+    } else {
+      setFloweringDates([...floweringDates, dateString]);
+    }
+  };
 
   return (
     <div className="flex h-screen overflow-hidden">
-
-      {/* Sidebar */}
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-
-      {/* Content area */}
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-
-        {/*  Site header */}
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-
-        <main className="grow">
+        <main>
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-
-            {/* Dashboard actions */}
-            <div className="sm:flex sm:justify-between sm:items-center mb-8">
-
-              {/* Left: Title */}
-              <div className="mb-4 sm:mb-0">
-                <h1 className="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">달력</h1>
-              </div>
-
-
-
-            </div>
-
-            {/* Cards */}
+            <h1 className="text-2xl font-semibold text-slate-800 mb-8">달력</h1>
             <div className="grid grid-cols-12 gap-6">
-              <CalendarMain />
-              {/* Line chart (Acme Plus) */}
-              <CalendarWatering />
-              {/* Line chart (Acme Advanced) */}
-              {/* Line chart (Acme Professional) */}
-              <CalendarFlower />
-              
-              
+              <CalendarMain 
+                currentDate={currentDate} 
+                wateredDates={wateredDates}
+                floweringDates={floweringDates}
+                onWatering={handleWatering}
+                onFlowering={handleFlowering}
+              />
+              <CalendarWatering wateredDates={wateredDates} />
+              <CalendarFlower floweringDates={floweringDates} />
             </div>
-
           </div>
         </main>
-
         <Banner />
-
       </div>
     </div>
   );
