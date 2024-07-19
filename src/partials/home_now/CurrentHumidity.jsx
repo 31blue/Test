@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState, useEffect } from 'react';
 import Tooltip from '../../components/Tooltip';
 import { chartAreaGradient } from '../../charts/ChartjsConfig';
@@ -7,6 +8,28 @@ import RealtimeChart from '../../charts/RealtimeChart';
 import { tailwindConfig, hexToRGB } from '../../utils/Utils';
 
 function CurrentHumidity() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        // 프록시를 통한 요청
+        await axios.get("/path"); // 습도 데이터를 가져오는 적절한 경로로 변경해야 합니다
+        setMessage("연결 성공");
+        setError(false);
+      } catch (error) {
+        setMessage("연결 실패");
+        setError(true);
+        console.error("Error:", error);
+      }
+      setIsLoading(false);
+    };
+
+    fetchData();
+  }, []);
 
   // IMPORTANT:
   // Code below is for demo purpose only, and it's not covered by support.
@@ -101,6 +124,16 @@ function CurrentHumidity() {
           <div className="text-xs text-center whitespace-nowrap">Built with <a className="underline" href="https://www.chartjs.org/" target="_blank" rel="noreferrer">Chart.js</a></div>
         </Tooltip>
       </header>
+      {/* Connection status */}
+      <div className="px-5 py-3">
+        {isLoading ? (
+          <p>연결 중...</p>
+        ) : error ? (
+          <p className="text-red-500">{message}</p>
+        ) : (
+          <p className="text-green-500">{message}</p>
+        )}
+      </div>
       {/* Chart built with Chart.js 3 */}
       {/* Change the height attribute to adjust the chart height */}
       <RealtimeChart data={chartData} width={595} height={248} />

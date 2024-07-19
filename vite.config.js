@@ -8,6 +8,8 @@ export default defineConfig({
     'process.env': process.env
   },
   plugins: [react()],
+
+
   resolve: {
     alias: {
       '@tailwindConfig': path.resolve(__dirname, 'tailwind.config.js'),
