@@ -34,7 +34,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route exact path="/" element={<Dashboard />} />
+        <Route exact path="/" element={<Home_PlantProfile />} />
         <Route path="/messages" element={<Messages />} />
         <Route path="/home_plantprofile" element={<Home_PlantProfile />} />
         <Route path="/home_now" element={<Home_Now />} />
