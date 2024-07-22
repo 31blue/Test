@@ -1,17 +1,47 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Transition from '../utils/Transition';
 
-function DropdownNotifications({
-  align
-}) {
+const initialNotifications = [
+  { id: 1, date: '2024-07-22', message: '식물의 꽃이 피었습니다.', title: '개화 알림', active: true },
+  { id: 2, date: '2024-07-22', message: '곤충이 발견되었습니다.', title: '병충해 알림', active: true },
+  { id: 3, date: '2024-07-21', message: '건강검진을 할 때가 되었습니다.', title: '건강검진 알림', active: true },
+  { id: 4, date: '2024-07-21', message: '방금 물주기를 하셨나요?', title: '물주기 알림', active: true },
+];
 
+function DropdownNotifications({ align }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [notifications, setNotifications] = useState(initialNotifications);
+  const navigate = useNavigate();
 
   const trigger = useRef(null);
   const dropdown = useRef(null);
 
-  // close on click outside
+  const toggleNotification = (id) => {
+    setNotifications(notifications.map(n => 
+      n.id === id ? { ...n, active: !n.active } : n
+    ));
+  };
+
+  const removeNotification = (id, e) => {
+    e.stopPropagation();
+    setNotifications(notifications.filter(n => n.id !== id));
+  };
+
+  const removeAllNotifications = () => {
+    setNotifications([]);
+  };
+
+  const markAllAsRead = () => {
+    setNotifications(notifications.map(n => ({ ...n, active: false })));
+  };
+
+  const restoreAllNotifications = () => {
+    setNotifications(initialNotifications);
+  };
+
+  const unreadCount = useMemo(() => notifications.filter(n => n.active).length, [notifications]);
+
   useEffect(() => {
     const clickHandler = ({ target }) => {
       if (!dropdown.current) return;
@@ -22,7 +52,6 @@ function DropdownNotifications({
     return () => document.removeEventListener('click', clickHandler);
   });
 
-  // close if the esc key is pressed
   useEffect(() => {
     const keyHandler = ({ keyCode }) => {
       if (!dropdownOpen || keyCode !== 27) return;
@@ -31,6 +60,8 @@ function DropdownNotifications({
     document.addEventListener('keydown', keyHandler);
     return () => document.removeEventListener('keydown', keyHandler);
   });
+
+  const recentNotifications = notifications.slice(0, 3);
 
   return (
     <div className="relative inline-flex">
@@ -52,7 +83,9 @@ function DropdownNotifications({
           <path d="M7 0a7 7 0 0 0-7 7c0 1.202.308 2.33.84 3.316l-.789 2.368a1 1 0 0 0 1.265 1.265l2.595-.865a1 1 0 0 0-.632-1.898l-.698.233.3-.9a1 1 0 0 0-.104-.85A4.97 4.97 0 0 1 2 7a5 5 0 0 1 5-5 4.99 4.99 0 0 1 4.093 2.135 1 1 0 1 0 1.638-1.148A6.99 6.99 0 0 0 7 0Z" />
           <path d="M11 6a5 5 0 0 0 0 10c.807 0 1.567-.194 2.24-.533l1.444.482a1 1 0 0 0 1.265-1.265l-.482-1.444A4.962 4.962 0 0 0 16 11a5 5 0 0 0-5-5Zm-3 5a3 3 0 0 1 6 0c0 .588-.171 1.134-.466 1.6a1 1 0 0 0-.115.82 1 1 0 0 0-.82.114A2.973 2.973 0 0 1 11 14a3 3 0 0 1-3-3Z" />
         </svg>
-        <div className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 border-2 border-gray-100 dark:border-gray-900 rounded-full"></div>
+        {unreadCount > 0 && (
+          <div className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 border-2 border-gray-100 dark:border-gray-900 rounded-full"></div>
+        )}
       </button>
 
       <Transition
@@ -70,43 +103,48 @@ function DropdownNotifications({
           onFocus={() => setDropdownOpen(true)}
           onBlur={() => setDropdownOpen(false)}
         >
-          <div className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase pt-1.5 pb-2 px-4">Notifications</div>
+          <div className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase pt-1.5 pb-2 px-4">
+            알림 {unreadCount > 0 && `(${unreadCount})`}
+          </div>
           <ul>
-            <li className="border-b border-gray-200 dark:border-gray-700/60 last:border-0">
-              <Link
-                className="block py-2 px-4 hover:bg-gray-50 dark:hover:bg-gray-700/20"
-                to="#0"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-              >
-                <span className="block text-sm mb-2">📣 <span className="font-medium text-gray-800 dark:text-gray-100">Edit your information in a swipe</span> Sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim.</span>
-                <span className="block text-xs font-medium text-gray-400 dark:text-gray-500">Feb 12, 2024</span>
-              </Link>
-            </li>
-            <li className="border-b border-gray-200 dark:border-gray-700/60 last:border-0">
-              <Link
-                className="block py-2 px-4 hover:bg-gray-50 dark:hover:bg-gray-700/20"
-                to="#0"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-              >
-                <span className="block text-sm mb-2">📣 <span className="font-medium text-gray-800 dark:text-gray-100">Edit your information in a swipe</span> Sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim.</span>
-                <span className="block text-xs font-medium text-gray-400 dark:text-gray-500">Feb 9, 2024</span>
-              </Link>
-            </li>
-            <li className="border-b border-gray-200 dark:border-gray-700/60 last:border-0">
-              <Link
-                className="block py-2 px-4 hover:bg-gray-50 dark:hover:bg-gray-700/20"
-                to="#0"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-              >
-                <span className="block text-sm mb-2">🚀<span className="font-medium text-gray-800 dark:text-gray-100">Say goodbye to paper receipts!</span> Sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim.</span>
-                <span className="block text-xs font-medium text-gray-400 dark:text-gray-500">Jan 24, 2024</span>
-              </Link>
-            </li>
+            {recentNotifications.map((notification) => (
+              <li key={notification.id} className="border-b border-gray-200 dark:border-gray-700/60 last:border-0">
+                <Link
+                  className="block py-2 px-4 hover:bg-gray-50 dark:hover:bg-gray-700/20"
+                  to="#0"
+                  onClick={() => toggleNotification(notification.id)}
+                >
+                  <div className="flex justify-between items-center">
+                    <span className="block mb-2">
+                      <span className="block text-base font-semibold text-gray-900 dark:text-gray-100">{notification.title}</span>
+                      <span className="text-sm font-light text-gray-600 dark:text-gray-400">{notification.message}</span>
+                    </span>
+                    <button
+                      onClick={(e) => removeNotification(notification.id, e)}
+                      className="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                      </svg>
+                    </button>
+                  </div>
+                  <span className="block text-xs font-medium text-gray-400 dark:text-gray-500">{notification.date}</span>
+                </Link>
+              </li>
+            ))}
           </ul>
+          <div className="py-2 px-4 border-t border-gray-200 dark:border-gray-700/60">
+            <button
+              onClick={() => navigate('/messages')}
+              className="text-xs font-medium px-2 py-1 rounded bg-green-100 text-green-600 hover:bg-green-200 w-full text-center"
+            >
+              더보기
+            </button>
+          </div>
         </div>
       </Transition>
     </div>
-  )
+  );
 }
 
 export default DropdownNotifications;

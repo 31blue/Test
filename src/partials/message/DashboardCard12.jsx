@@ -1,107 +1,118 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+const initialNotifications = [
+  { id: 1, date: '2024-07-22', message: '식물의 꽃이 피었습니다. - 개화 알림', active: true },
+  { id: 2, date: '2024-07-22', message: '곤충이 발견되었습니다. - 병충해 알림', active: true },
+  { id: 3, date: '2024-07-21', message: '건강검진을 할 때가 되었습니다. - 건강검진 알림', active: true },
+  { id: 4, date: '2024-07-21', message: '방금 물주기를 하셨나요? - 물주기 알림', active: true },
+];
 
 function DashboardCard12() {
+  const [notifications, setNotifications] = useState(initialNotifications);
+
+  const toggleNotification = (id) => {
+    setNotifications(notifications.map(n => 
+      n.id === id ? { ...n, active: !n.active } : n
+    ));
+  };
+
+  const removeNotification = (id) => {
+    setNotifications(notifications.filter(n => n.id !== id));
+  };
+
+  const removeAllNotifications = () => {
+    setNotifications([]);
+  };
+
+  const markAllAsRead = () => {
+    setNotifications(notifications.map(n => ({ ...n, active: false })));
+  };
+
+  const restoreAllNotifications = () => {
+    setNotifications(initialNotifications);
+  };
+
+  const groupedNotifications = notifications.reduce((acc, notification) => {
+    if (!acc[notification.date]) {
+      acc[notification.date] = [];
+    }
+    acc[notification.date].push(notification);
+    return acc;
+  }, {});
+
   return (
-    <div className="col-span-full xl:col-span-6 bg-white dark:bg-gray-800 shadow-sm rounded-xl">
-      <header className="px-5 py-4 border-b border-gray-100 dark:border-gray-700/60">
-        <h2 className="font-semibold text-gray-800 dark:text-gray-100">Recent Activity</h2>
+    <div className="col-span-full xl:col-span-6 bg-white dark:bg-gray-800 shadow-sm rounded-xl overflow-hidden">
+      <header className="px-5 py-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
+        <h2 className="font-semibold text-gray-800 dark:text-gray-100">알림</h2>
+        <div>
+          <button
+            onClick={restoreAllNotifications}
+            className="text-xs font-medium px-2 py-1 rounded bg-green-100 text-green-600 hover:bg-green-200 mr-2"
+          >
+            복구하기
+          </button>
+          <button
+            onClick={removeAllNotifications}
+            className="text-xs font-medium px-2 py-1 rounded bg-red-100 text-red-600 hover:bg-red-200 mr-2"
+          >
+            모두 삭제하기
+          </button>
+          <button
+            onClick={markAllAsRead}
+            className="text-xs font-medium px-2 py-1 rounded bg-blue-100 text-blue-600 hover:bg-blue-200"
+          >
+            모두 확인하기
+          </button>
+        </div>
       </header>
       <div className="p-3">
-
-        {/* Card content */}
-        {/* "Today" group */}
-        <div>
-          <header className="text-xs uppercase text-gray-400 dark:text-gray-500 bg-gray-50 dark:bg-gray-700 dark:bg-opacity-50 rounded-sm font-semibold p-2">Today</header>
-          <ul className="my-1">
-            {/* Item */}
-            <li className="flex px-2">
-              <div className="w-9 h-9 rounded-full shrink-0 bg-violet-500 my-2 mr-3">
-                <svg className="w-9 h-9 fill-current text-white" viewBox="0 0 36 36">
-                  <path d="M18 10c-4.4 0-8 3.1-8 7s3.6 7 8 7h.6l5.4 2v-4.4c1.2-1.2 2-2.8 2-4.6 0-3.9-3.6-7-8-7zm4 10.8v2.3L18.9 22H18c-3.3 0-6-2.2-6-5s2.7-5 6-5 6 2.2 6 5c0 2.2-2 3.8-2 3.8z" />
-                </svg>
-              </div>
-              <div className="grow flex items-center border-b border-gray-100 dark:border-gray-700/60 text-sm py-2">
-                <div className="grow flex justify-between">
-                  <div className="self-center"><a className="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white" href="#0">Nick Mark</a> mentioned <a className="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white" href="#0">Sara Smith</a> in a new post</div>
-                  <div className="shrink-0 self-end ml-2">
-                    <a className="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400" href="#0">View<span className="hidden sm:inline"> -&gt;</span></a>
-                  </div>
-                </div>
-              </div>
-            </li>
-            {/* Item */}
-            <li className="flex px-2">
-              <div className="w-9 h-9 rounded-full shrink-0 bg-red-500 my-2 mr-3">
-                <svg className="w-9 h-9 fill-current text-white" viewBox="0 0 36 36">
-                  <path d="M25 24H11a1 1 0 01-1-1v-5h2v4h12v-4h2v5a1 1 0 01-1 1zM14 13h8v2h-8z" />
-                </svg>
-              </div>
-              <div className="grow flex items-center border-b border-gray-100 dark:border-gray-700/60 text-sm py-2">
-                <div className="grow flex justify-between">
-                  <div className="self-center">The post <a className="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white" href="#0">Post Name</a> was removed by <a className="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white" href="#0">Nick Mark</a></div>
-                  <div className="shrink-0 self-end ml-2">
-                    <a className="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400" href="#0">View<span className="hidden sm:inline"> -&gt;</span></a>
-                  </div>
-                </div>
-              </div>
-            </li>
-            {/* Item */}
-            <li className="flex px-2">
-              <div className="w-9 h-9 rounded-full shrink-0 bg-green-500 my-2 mr-3">
-                <svg className="w-9 h-9 fill-current text-white" viewBox="0 0 36 36">
-                  <path d="M15 13v-3l-5 4 5 4v-3h8a1 1 0 000-2h-8zM21 21h-8a1 1 0 000 2h8v3l5-4-5-4v3z" />
-                </svg>
-              </div>
-              <div className="grow flex items-center text-sm py-2">
-                <div className="grow flex justify-between">
-                  <div className="self-center"><a className="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white" href="#0">Patrick Sullivan</a> published a new <a className="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white" href="#0">post</a></div>
-                  <div className="shrink-0 self-end ml-2">
-                    <a className="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400" href="#0">View<span className="hidden sm:inline"> -&gt;</span></a>
-                  </div>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div>
-        {/* "Yesterday" group */}
-        <div>
-          <header className="text-xs uppercase text-gray-400 dark:text-gray-500 bg-gray-50 dark:bg-gray-700 dark:bg-opacity-50 rounded-sm font-semibold p-2">Yesterday</header>
-          <ul className="my-1">
-            {/* Item */}
-            <li className="flex px-2">
-              <div className="w-9 h-9 rounded-full shrink-0 bg-sky-500 my-2 mr-3">
-                <svg className="w-9 h-9 fill-current text-white" viewBox="0 0 36 36">
-                  <path d="M23 11v2.085c-2.841.401-4.41 2.462-5.8 4.315-1.449 1.932-2.7 3.6-5.2 3.6h-1v2h1c3.5 0 5.253-2.338 6.8-4.4 1.449-1.932 2.7-3.6 5.2-3.6h3l-4-4zM15.406 16.455c.066-.087.125-.162.194-.254.314-.419.656-.872 1.033-1.33C15.475 13.802 14.038 13 12 13h-1v2h1c1.471 0 2.505.586 3.406 1.455zM24 21c-1.471 0-2.505-.586-3.406-1.455-.066.087-.125.162-.194.254-.316.422-.656.873-1.028 1.328.959.878 2.108 1.573 3.628 1.788V25l4-4h-3z" />
-                </svg>
-              </div>
-              <div className="grow flex items-center border-b border-gray-100 dark:border-gray-700/60 text-sm py-2">
-                <div className="grow flex justify-between">
-                  <div className="self-center"><a className="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white" href="#0">240+</a> users have subscribed to <a className="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white" href="#0">Newsletter #1</a></div>
-                  <div className="shrink-0 self-end ml-2">
-                    <a className="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400" href="#0">View<span className="hidden sm:inline"> -&gt;</span></a>
-                  </div>
-                </div>
-              </div>
-            </li>
-            {/* Item */}
-            <li className="flex px-2">
-              <div className="w-9 h-9 rounded-full shrink-0 bg-violet-500 my-2 mr-3">
-                <svg className="w-9 h-9 fill-current text-white" viewBox="0 0 36 36">
-                  <path d="M18 10c-4.4 0-8 3.1-8 7s3.6 7 8 7h.6l5.4 2v-4.4c1.2-1.2 2-2.8 2-4.6 0-3.9-3.6-7-8-7zm4 10.8v2.3L18.9 22H18c-3.3 0-6-2.2-6-5s2.7-5 6-5 6 2.2 6 5c0 2.2-2 3.8-2 3.8z" />
-                </svg>
-              </div>
-              <div className="grow flex items-center text-sm py-2">
-                <div className="grow flex justify-between">
-                  <div className="self-center">The post <a className="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white" href="#0">Post Name</a> was suspended by <a className="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white" href="#0">Nick Mark</a></div>
-                  <div className="shrink-0 self-end ml-2">
-                    <a className="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400" href="#0">View<span className="hidden sm:inline"> -&gt;</span></a>
-                  </div>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div>
-
+        {Object.entries(groupedNotifications).map(([date, notifs]) => (
+          notifs.length > 0 && (
+            <div key={date} className="mb-4 last:mb-0">
+              <header className="text-xs uppercase text-gray-400 dark:text-gray-500 bg-gray-50 dark:bg-gray-700 rounded-sm font-semibold p-2">
+                {new Date(date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </header>
+              <ul className="mt-1">
+                {notifs.map(notification => (
+                  <li key={notification.id} className="border-b border-gray-100 dark:border-gray-700 last:border-b-0">
+                    <div className="flex items-center justify-between py-2 px-2">
+                      <div className={`flex-grow pr-2 text-sm ${notification.active ? 'text-black dark:text-white' : 'text-gray-400 dark:text-gray-500'}`}>
+                        {notification.message}
+                      </div>
+                      <div className="flex items-center">
+                        <button
+                          onClick={() => toggleNotification(notification.id)}
+                          className={`text-xs font-medium px-2 py-1 rounded mr-2 ${
+                            notification.active 
+                              ? 'bg-green-100 text-green-600 dark:bg-green-700 dark:text-green-400' 
+                              : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400'
+                          } ${
+                            notification.active 
+                              ? 'hover:bg-violet-100 hover:text-violet-600 dark:hover:bg-violet-700 dark:hover:text-violet-400' 
+                              : 'hover:bg-gray-200 hover:text-gray-700 dark:hover:bg-gray-600 dark:hover:text-gray-300'
+                          } transition-colors duration-150`}
+                        >
+                          {notification.active ? '확인 전' : '확인 완료'}
+                        </button>
+                        <button
+                          onClick={() => removeNotification(notification.id)}
+                          className="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        ))}
+        {notifications.length === 0 && (
+          <p className="text-center text-gray-500 dark:text-gray-400 py-4">알림이 없습니다.</p>
+        )}
       </div>
     </div>
   );

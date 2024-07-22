@@ -1,12 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-function DashboardCard01() {
-  const [isAllNotificationsOn, setIsAllNotificationsOn] = useState(false);
-
-  const toggleNotifications = () => {
-    setIsAllNotificationsOn(!isAllNotificationsOn);
-  };
-
+function DashboardCard01({ isAllNotificationsOn, toggleAllNotifications }) {
   return (
     <div className="col-span-full sm:col-span-6 xl:col-span-4 bg-white dark:bg-gray-800 shadow-sm rounded-xl">
       <div className="p-5">
@@ -19,7 +13,7 @@ function DashboardCard01() {
                 type="checkbox"
                 className="hidden"
                 checked={isAllNotificationsOn}
-                onChange={toggleNotifications}
+                onChange={toggleAllNotifications}
               />
               <div className={`toggle__line w-10 h-4 ${isAllNotificationsOn ? 'bg-green-400' : 'bg-gray-400'} rounded-full shadow-inner transition-colors duration-300 ease-in-out`}></div>
               <div className={`toggle__dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition-transform duration-300 ease-in-out ${isAllNotificationsOn ? 'transform translate-x-full' : ''}`}></div>

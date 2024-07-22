@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 
 function CalendarMain({ currentDate, wateredDates, floweringDates, onWatering, onFlowering }) {
   const [selectedDate, setSelectedDate] = useState(null);
+  const [displayDate, setDisplayDate] = useState(new Date(currentDate.getFullYear(), currentDate.getMonth(), 1));
 
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth();
-  const today = currentDate.getDate();
+  const year = displayDate.getFullYear();
+  const month = displayDate.getMonth();
 
   const firstDay = new Date(year, month, 1);
   const lastDay = new Date(year, month + 1, 0);
@@ -19,6 +19,7 @@ function CalendarMain({ currentDate, wateredDates, floweringDates, onWatering, o
   });
 
   const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+  const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
 
   const handleDateClick = (day) => {
     if (day) {
@@ -43,12 +44,20 @@ function CalendarMain({ currentDate, wateredDates, floweringDates, onWatering, o
   const isWatered = selectedDate && wateredDates.includes(selectedDate.toDateString());
   const isFlowering = selectedDate && floweringDates.includes(selectedDate.toDateString());
 
+  const changeMonth = (increment) => {
+    setDisplayDate(new Date(year, month + increment, 1));
+  };
+
   return (
     <div className="col-span-full xl:col-span-8 bg-white dark:bg-gray-800 shadow-sm rounded-xl">
       <header className="px-5 py-4 border-b border-gray-100 dark:border-gray-700/60 flex justify-between items-center">
-        <h2 className="font-semibold text-gray-800 dark:text-gray-100">
-          {`${year}년 ${month + 1}월 ${currentDate.getDate()}일 (${weekdays[currentDate.getDay()]})`}
-        </h2>
+        <div className="flex items-center">
+          <button onClick={() => changeMonth(-1)} className="mr-4">{"<"}</button>
+          <h2 className="font-semibold text-gray-800 dark:text-gray-100">
+            {`${year}년 ${months[month]}`}
+          </h2>
+          <button onClick={() => changeMonth(1)} className="ml-4">{">"}</button>
+        </div>
         <div>
           <button
             className={`${isWatered ? 'bg-red-500 hover:bg-red-700' : 'bg-blue-500 hover:bg-blue-700'} text-white font-bold py-2 px-4 rounded mr-2`}
@@ -76,22 +85,24 @@ function CalendarMain({ currentDate, wateredDates, floweringDates, onWatering, o
         </div>
         <div className="grid grid-cols-7 gap-2">
           {calendarDays.map((day, index) => {
-            const isFutureDate = day && new Date(year, month, day) > currentDate;
+            const date = day ? new Date(year, month, day) : null;
+            const isFutureDate = date && date > currentDate;
+            const isToday = date && date.toDateString() === currentDate.toDateString();
             return (
               <div 
                 key={index} 
                 className={`aspect-square flex flex-col items-center justify-center ${
                   day ? 'bg-gray-100 dark:bg-gray-700 cursor-pointer' : ''
                 } ${
-                  day === today ? 'bg-green-100 dark:bg-green-900' : ''
+                  isToday ? 'bg-green-100 dark:bg-green-900' : ''
                 } rounded-lg ${
-                  selectedDate && day === selectedDate.getDate() ? 'border-2 border-blue-500' : ''
+                  selectedDate && day === selectedDate.getDate() && month === selectedDate.getMonth() ? 'border-2 border-blue-500' : ''
                 }`}
                 onClick={() => handleDateClick(day)}
               >
-                <div className={day === today ? 'text-green-700 dark:text-green-300 font-bold' : ''}>{day}</div>
+                <div className={isToday ? 'text-green-700 dark:text-green-300 font-bold' : ''}>{day}</div>
                 <div className="flex mt-1">
-                  {day && !isFutureDate && wateredDates.includes(new Date(year, month, day).toDateString()) && (
+                  {date && !isFutureDate && wateredDates.includes(date.toDateString()) && (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -102,7 +113,7 @@ function CalendarMain({ currentDate, wateredDates, floweringDates, onWatering, o
                       <path d="M12 0C8.8 5.3 6 8.7 6 12c0 3.3 2.7 6 6 6s6-2.7 6-6c0-3.3-2.8-6.7-6-12z" />
                     </svg>
                   )}
-                  {day && !isFutureDate && floweringDates.includes(new Date(year, month, day).toDateString()) && (
+                  {date && !isFutureDate && floweringDates.includes(date.toDateString()) && (
                     <div className="w-3 h-3 bg-pink-500 rounded-full"></div>
                   )}
                 </div>

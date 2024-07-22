@@ -6,6 +6,7 @@ import SidebarLinkGroup from "./SidebarLinkGroup";
 function Sidebar({
   sidebarOpen,
   setSidebarOpen,
+  messageCount = 0,
   variant = 'default',
 }) {
   const location = useLocation();
@@ -101,156 +102,180 @@ function Sidebar({
 
 
               {/* Home 홈 */}
-              {/* Home 홈 */}
-              {/* Home */}
-              <SidebarLinkGroup activecondition={true}>
-                {(handleClick, open) => {
-                  const isActive = pathname === "/home_plantprofile" || pathname.includes("Home_PlantProfile");
-                  return (
-                    <React.Fragment>
-                      <a
-                        href="#0"
-                        className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${
-                          isActive ? "" : "hover:text-gray-900 dark:hover:text-white"
-                        }`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleClick();
-                        }}
-                      >
-                        <div className="flex items-center justify-between p-2">
-                          <div className="flex items-center">
-                            <svg className={`shrink-0 fill-current ${isActive ? 'text-violet-500' : 'text-gray-400 dark:text-gray-500'}`} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                              <path d="M5.936.278A7.983 7.983 0 0 1 8 0a8 8 0 1 1-8 8c0-.722.104-1.413.278-2.064a1 1 0 1 1 1.932.516A5.99 5.99 0 0 0 2 8a6 6 0 1 0 6-6c-.53 0-1.045.076-1.548.21A1 1 0 1 1 5.936.278Z" />
-                              <path d="M6.068 7.482A2.003 2.003 0 0 0 8 10a2 2 0 1 0-.518-3.932L3.707 2.293a1 1 0 0 0-1.414 1.414l3.775 3.775Z" />
-                            </svg>
-                            <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                              홈
-                            </span>
-                          </div>
-                          {/* Icon */}
-                          <div className="flex shrink-0 ml-2">
-                            <svg className={`w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500 ${open && "rotate-180"}`} viewBox="0 0 12 12">
-                              <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
-                            </svg>
-                          </div>
+              <SidebarLinkGroup activecondition={pathname.includes("home_plantprofile") || pathname.includes("home_now")}>
+                {(handleClick, open) => (
+                  <div className="mb-0.5 rounded-sm">
+                    <a
+                      href="#0"
+                      className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${
+                        pathname.includes("home_plantprofile") || pathname.includes("home_now")
+                          ? ""
+                          : "hover:text-gray-900 dark:hover:text-white"
+                      }`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleClick();
+                        setSidebarExpanded(true);
+                      }}
+                    >
+                      <div className="flex items-center justify-between p-2">
+                        <div className="flex items-center">
+                          <svg
+                            className={`shrink-0 fill-current ${
+                              pathname.includes("home_plantprofile") || pathname.includes("home_now")
+                                ? "text-green-500"
+                                : "text-gray-400 dark:text-gray-500"
+                            }`}
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                          >
+                            <path d="M5.936.278A7.983 7.983 0 0 1 8 0a8 8 0 1 1-8 8c0-.722.104-1.413.278-2.064a1 1 0 1 1 1.932.516A5.99 5.99 0 0 0 2 8a6 6 0 1 0 6-6c-.53 0-1.045.076-1.548.21A1 1 0 1 1 5.936.278Z" />
+                            <path d="M6.068 7.482A2.003 2.003 0 0 0 8 10a2 2 0 1 0-.518-3.932L3.707 2.293a1 1 0 0 0-1.414 1.414l3.775 3.775Z" />
+                          </svg>
+                          <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                            홈
+                          </span>
                         </div>
-                      </a>
-                      <div className={`lg:block ${!open && "hidden"}`}>
-                        <ul className="pl-8 mt-1">
-                          <li className="mb-1 last:mb-0">
-                            <NavLink
-                              end
-                              to="/home_plantprofile"
-                              className={({ isActive }) =>
-                                `block transition duration-150 truncate ${
-                                  isActive
-                                    ? "text-violet-500"
-                                    : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
-                                }`
-                              }
-                            >
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                식물 프로필
-                              </span>
-                            </NavLink>
-                          </li>
-                          <li className="mb-1 last:mb-0">
-                            <NavLink
-                              end
-                              to="/home_now"
-                              className={({ isActive }) =>
-                                "block transition duration-150 truncate " + (isActive ? "text-violet-500" : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200")
-                              }
-                            >
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                실시간 온습도
-                              </span>
-                            </NavLink>
-                          </li>
-                        </ul>
+                        <div className="flex shrink-0 ml-2">
+
+                        </div>
                       </div>
-                    </React.Fragment>
-                  );
-                }}
+                    </a>
+                    <div className={`lg:hidden lg:sidebar-expanded:block 2xl:block ${!open && "hidden"}`}>
+                      <ul className="pl-8 mt-1">
+                        <li className="mb-1 last:mb-0">
+                          <NavLink
+                            end
+                            to="/home_plantprofile"
+                            className={({ isActive }) =>
+                              `block transition duration-150 truncate ${
+                                isActive ? "text-green-500" : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                              }`
+                            }
+                          >
+                            <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                              식물 프로필
+                            </span>
+                          </NavLink>
+                        </li>
+                        <li className="mb-1 last:mb-0">
+                          <NavLink
+                            end
+                            to="/home_now"
+                            className={({ isActive }) =>
+                              `block transition duration-150 truncate ${
+                                isActive ? "text-green-500" : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                              }`
+                            }
+                          >
+                            <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                              실시간 온습도
+                            </span>
+                          </NavLink>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                )}
               </SidebarLinkGroup>
 
-              <SidebarLinkGroup activecondition={true}>
-                {(handleClick, open) => {
-                  return (
-                    <React.Fragment>
-                      <a
-                        href="#0"
-                        className="block text-gray-800 dark:text-gray-100 truncate transition duration-150"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleClick();
-                        }}
-                      >
-                        <div className="flex items-center justify-between p-2">
-                          <div className="flex items-center">
-                            <svg className={`shrink-0 fill-current text-green-500`} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                              <path d="M7.586 9H1a1 1 0 1 1 0-2h6.586L6.293 5.707a1 1 0 0 1 1.414-1.414l3 3a1 1 0 0 1 0 1.414l-3 3a1 1 0 1 1-1.414-1.414L7.586 9ZM3.075 4.572a1 1 0 1 1-1.64-1.144 8 8 0 1 1 0 9.144 1 1 0 0 1 1.64-1.144 6 6 0 1 0 0-6.856Z" />
-                            </svg>
-                            <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                              분석
-                            </span>
-                          </div>
-                          {/* Icon */}
-                          <div className="flex shrink-0 ml-2">
-                            <svg className={`w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500 ${open && "rotate-180"}`} viewBox="0 0 12 12">
-                              <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
-                            </svg>
-                          </div>
+              {/* Analysis 분석 */}
+              <SidebarLinkGroup activecondition={pathname.includes("analysis_summary") || pathname.includes("analysis_photosynthesis") || pathname.includes("analysis_transpiration")}>
+                {(handleClick, open) => (
+                  <div className="mb-0.5 rounded-sm">
+                    <a
+                      href="#0"
+                      className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${
+                        pathname.includes("analysis_summary") || pathname.includes("analysis_photosynthesis") || pathname.includes("analysis_transpiration")
+                          ? ""
+                          : "hover:text-gray-900 dark:hover:text-white"
+                      }`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleClick();
+                        setSidebarExpanded(true);
+                      }}
+                    >
+                      <div className="flex items-center justify-between p-2">
+                        <div className="flex items-center">
+                          <svg
+                            className={`shrink-0 fill-current ${
+                              pathname.includes("analysis_summary") || pathname.includes("analysis_photosynthesis") || pathname.includes("analysis_transpiration")
+                                ? "text-green-500"
+                                : "text-gray-400 dark:text-gray-500"
+                            }`}
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                          >
+                            <path d="M7.586 9H1a1 1 0 1 1 0-2h6.586L6.293 5.707a1 1 0 0 1 1.414-1.414l3 3a1 1 0 0 1 0 1.414l-3 3a1 1 0 1 1-1.414-1.414L7.586 9ZM3.075 4.572a1 1 0 1 1-1.64-1.144 8 8 0 1 1 0 9.144 1 1 0 0 1 1.64-1.144 6 6 0 1 0 0-6.856Z" />
+                          </svg>
+                          <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                            분석
+                          </span>
                         </div>
-                      </a>
-                      <div className={`lg:block ${!open && "hidden"}`}>
-                        <ul className="pl-8 mt-1">
-                          <li className="mb-1 last:mb-0">
-                            <NavLink
-                              end
-                              to="/analysis_summary"
-                              className={({ isActive }) =>
-                                "block transition duration-150 truncate " + (isActive ? "text-green-500" : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200")
-                              }
-                            >
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                요약
-                              </span>
-                            </NavLink>
-                          </li>
-                          <li className="mb-1 last:mb-0">
-                            <NavLink
-                              end
-                              to="/analysis_photosynthesis"
-                              className={({ isActive }) =>
-                                "block transition duration-150 truncate " + (isActive ? "text-green-500" : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200")
-                              }
-                            >
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                광합성량 자세히
-                              </span>
-                            </NavLink>
-                          </li>
-                          <li className="mb-1 last:mb-0">
-                            <NavLink
-                              end
-                              to="/analysis_transpiration"
-                              className={({ isActive }) =>
-                                "block transition duration-150 truncate " + (isActive ? "text-green-500" : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200")
-                              }
-                            >
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                증발산량 자세히
-                              </span>
-                            </NavLink>
-                          </li>
-                        </ul>
+                        <div className="flex shrink-0 ml-2">
+
+                        </div>
                       </div>
-                    </React.Fragment>
-                  );
-                }}
+                    </a>
+                    <div className={`lg:hidden lg:sidebar-expanded:block 2xl:block ${!open && "hidden"}`}>
+                      <ul className="pl-8 mt-1">
+                        <li className="mb-1 last:mb-0">
+                          <NavLink
+                            end
+                            to="/analysis_summary"
+                            className={({ isActive }) =>
+                              `block transition duration-150 truncate ${
+                                isActive ? "text-green-500" : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                              }`
+                            }
+                          >
+                            <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                              요약
+                            </span>
+                          </NavLink>
+                        </li>
+                        <li className="mb-1 last:mb-0">
+                          <NavLink
+                            end
+                            to="/analysis_photosynthesis"
+                            className={({ isActive }) =>
+                              `block transition duration-150 truncate ${
+                                isActive ? "text-green-500" : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                              }`
+                            }
+                          >
+                            <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                              광합성량 자세히
+                            </span>
+                          </NavLink>
+                        </li>
+                        <li className="mb-1 last:mb-0">
+                          <NavLink
+                            end
+                            to="/analysis_transpiration"
+                            className={({ isActive }) =>
+                              `block transition duration-150 truncate ${
+                                isActive ? "text-green-500" : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                              }`
+                            }
+                          >
+                            <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                              증발산량 자세히
+                            </span>
+                          </NavLink>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                )}
               </SidebarLinkGroup>
+
+
 
 
 
@@ -276,9 +301,11 @@ function Sidebar({
                       </span>
                     </div>
                     {/* Badge */}
-                    <div className="flex flex-shrink-0 ml-2">
-                      <span className="inline-flex items-center justify-center h-5 text-xs font-medium text-white bg-green-400 px-2 rounded">4</span>
-                    </div>
+                    {messageCount > 0 && (
+                      <div className="flex flex-shrink-0 ml-2">
+                        <span className="inline-flex items-center justify-center h-5 text-xs font-medium text-white bg-green-400 px-2 rounded">{messageCount}</span>
+                      </div>
+                    )}
                   </div>
                 </NavLink>
               </li>

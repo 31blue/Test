@@ -10,7 +10,7 @@ import './charts/ChartjsConfig';
 
 // Import pages
 import Dashboard from './pages/Dashboard';
-import Messages from './pages/Messages'; // Messages.jsx 파일 가져오기
+import Messages from './pages/Messages';
 import Home_PlantProfile from './pages/Home_PlantProfile';
 import Home_Now from './pages/Home_Now';
 import Analysis_Summary from './pages/Analysis_Summary';

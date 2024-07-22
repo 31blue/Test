@@ -1,21 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-function DashboardCard02() {
-  const [notifications, setNotifications] = useState({
-    watering: false,
-    flowering: false,
-    healthCheck: false,
-    pestControl: false,
-    generalNotifications: false,
-  });
-
-  const toggleNotification = (type) => {
-    setNotifications(prev => ({
-      ...prev,
-      [type]: !prev[type]
-    }));
-  };
-
+function DashboardCard02({ notifications, toggleNotification }) {
   const NotificationToggle = ({ type, label }) => (
     <div className="flex items-center justify-between mb-4">
       <span className="text-gray-700 dark:text-gray-300">{label}</span>
