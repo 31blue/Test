@@ -1,12 +1,25 @@
-//C:\Users\user\tailwind-dashboard-template-main\src\partials\home_plantprofile\PlantProfile.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import defaultImage from '../../images/album/michael-benz--IZ2sgQKIhM-unsplash.jpg';
 
-function PlantProfile({ image, initialName = '바질01' }) {
-  console.log('DashboardCardPlantProfile', { image, initialName });
+function PlantProfile({ image, initialName = '바질01', registrationDate }) {
   const [imgSrc, setImgSrc] = useState(image || defaultImage);
   const [name, setName] = useState(initialName);
   const [isEditing, setIsEditing] = useState(false);
+  const [dDay, setDDay] = useState(0);
+
+  useEffect(() => {
+    const calculateDDay = () => {
+      const today = new Date();
+      const regDate = new Date(registrationDate);
+      const diffTime = Math.abs(today - regDate);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      setDDay(diffDays);
+    };
+
+    if (registrationDate) {
+      calculateDDay();
+    }
+  }, [registrationDate]);
 
   const onError = () => {
     console.log('Image failed to load, using default image');
@@ -25,13 +38,18 @@ function PlantProfile({ image, initialName = '바질01' }) {
     <div className="col-span-full xl:col-span-8 bg-white dark:bg-gray-800 shadow-sm rounded-xl">
       <div className="p-5">
         <div className="flex flex-col items-center">
-          <div className="w-64 h-64 mb-4 overflow-hidden rounded-full">
+          <div className="w-64 h-64 mb-4 overflow-hidden rounded-full relative group">
             <img 
               src={imgSrc} 
               alt={name} 
               className="w-full h-full object-cover" 
               onError={onError}
             />
+            {registrationDate && (
+              <div className="absolute inset-0 bg-white bg-opacity-70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <span className="text-black font-bold text-lg">D+{dDay}</span>
+              </div>
+            )}
           </div>
           {isEditing ? (
             <input

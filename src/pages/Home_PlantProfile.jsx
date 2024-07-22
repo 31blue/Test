@@ -46,7 +46,11 @@ function Dashboard() {
             
             {/* Cards */}
             <div className="grid grid-cols-12 gap-6">
-              <PlantProfile image={plantData.image} initialName={plantData.name} />
+              <PlantProfile 
+                image={plantData.image} 
+                initialName={plantData.name} 
+                registrationDate={plantData.registrationDate}
+              />
               <PlantSpecies species={plantData.species} />
               <PlantRegistration date={plantData.registrationDate} />
               <PlantPhysical

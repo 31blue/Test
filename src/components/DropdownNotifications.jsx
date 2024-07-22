@@ -28,18 +28,6 @@ function DropdownNotifications({ align }) {
     setNotifications(notifications.filter(n => n.id !== id));
   };
 
-  const removeAllNotifications = () => {
-    setNotifications([]);
-  };
-
-  const markAllAsRead = () => {
-    setNotifications(notifications.map(n => ({ ...n, active: false })));
-  };
-
-  const restoreAllNotifications = () => {
-    setNotifications(initialNotifications);
-  };
-
   const unreadCount = useMemo(() => notifications.filter(n => n.active).length, [notifications]);
 
   useEffect(() => {
@@ -108,7 +96,10 @@ function DropdownNotifications({ align }) {
           </div>
           <ul>
             {recentNotifications.map((notification) => (
-              <li key={notification.id} className="border-b border-gray-200 dark:border-gray-700/60 last:border-0">
+              <li 
+                key={notification.id} 
+                className={`border-b border-gray-200 dark:border-gray-700/60 last:border-0 ${!notification.active ? 'bg-gray-100 dark:bg-gray-700' : ''}`}
+              >
                 <Link
                   className="block py-2 px-4 hover:bg-gray-50 dark:hover:bg-gray-700/20"
                   to="#0"
@@ -116,8 +107,8 @@ function DropdownNotifications({ align }) {
                 >
                   <div className="flex justify-between items-center">
                     <span className="block mb-2">
-                      <span className="block text-base font-semibold text-gray-900 dark:text-gray-100">{notification.title}</span>
-                      <span className="text-sm font-light text-gray-600 dark:text-gray-400">{notification.message}</span>
+                      <span className={`block text-base font-semibold ${!notification.active ? 'text-gray-500' : 'text-gray-900 dark:text-gray-100'}`}>{notification.title}</span>
+                      <span className={`text-sm font-light ${!notification.active ? 'text-gray-400' : 'text-gray-600 dark:text-gray-400'}`}>{notification.message}</span>
                     </span>
                     <button
                       onClick={(e) => removeNotification(notification.id, e)}
