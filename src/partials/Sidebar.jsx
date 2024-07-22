@@ -84,7 +84,7 @@ function Sidebar({
           <NavLink end to="/home_plantprofile" className="block">
             <div className="w-9.6 h-9.6 rounded-full overflow-hidden">
               <img 
-                src="/src/images/favicon/android-icon-72x72.png" 
+                src="/src/images/album/favicon.png" 
                 alt="Logo" 
                 className="w-full h-full object-cover"
               />

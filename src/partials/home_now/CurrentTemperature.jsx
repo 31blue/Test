@@ -9,13 +9,13 @@ function CurrentTemperature() {
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
   const [data, setData] = useState(null);
-  const [temperatureData, setTemperatureData] = useState([]);
+  const [temperatureData, setTemperatureData] = useState(Array(15).fill({ time: new Date(), temp: 0.0 }));
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get('http://221.160.142.241:9000/test');
+        const response = await axios.get('http://192.168.0.21:8000/test');
         setMessage("연결 성공");
         setData(response.data);
         console.log(response.data);
@@ -34,11 +34,9 @@ function CurrentTemperature() {
 
   const updateTemperatureData = (data) => {
     if (typeof data === "string") {
-      const parsedData = data.split(' ').map(pair => {
-        const [temp, value] = pair.split(',').map(Number);
-        return { time: new Date(), temp };
-      });
-      setTemperatureData(parsedData);
+      const parsedData = data.split(',,').map((temp) => parseFloat(temp));
+      const newTemperatureData = parsedData.map(temp => ({ time: new Date(), temp }));
+      setTemperatureData(newTemperatureData);
     }
   };
 
