@@ -9,7 +9,7 @@ function CurrentTemperature() {
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
   const [data, setData] = useState(null);
-  const [temperatureData, setTemperatureData] = useState(Array(15).fill({ time: new Date(), temp: 0.0 }));
+  const [temperatureData, setTemperatureData] = useState(Array(15).fill({ time: new Date(), temp: 26.70 }));
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,36 +30,33 @@ function CurrentTemperature() {
     };
 
     fetchData();
+    
+    // Set up interval to fetch data every 2 seconds
+    const interval = setInterval(fetchData, 2000);
+
+    // Clean up interval on component unmount
+    return () => clearInterval(interval);
   }, []);
 
   const updateTemperatureData = (data) => {
     if (typeof data === "string") {
       const parsedData = data.split(',,').map((temp) => parseFloat(temp));
-      const newTemperatureData = parsedData.map(temp => ({ time: new Date(), temp }));
-      setTemperatureData(newTemperatureData);
-    }
-  };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const newTemperature = Math.random() * 40; // Random temperature between 0 and 40
+      const latestTemp = parsedData[parsedData.length - 1];
       setTemperatureData(prevData => {
-        const newData = [...prevData, { time: new Date(), temp: newTemperature }];
+        const newData = [...prevData, { time: new Date(), temp: latestTemp }];
         if (newData.length > 15) newData.shift(); // Keep only last 15 data points
         return newData;
       });
-    }, 2000);
+    }
+  };
 
-    return () => clearInterval(interval);
-  }, []);
-
-  const svgWidth = 800; // 그래프의 가로 길이를 늘림
-  const svgHeight = 400; // 그래프의 세로 길이를 늘림
+  const svgWidth = 800;
+  const svgHeight = 400;
   const margin = { top: 20, right: 20, bottom: 30, left: 50 };
   const width = svgWidth - margin.left - margin.right;
   const height = svgHeight - margin.top - margin.bottom;
 
-  const xScale = (index) => (index / 14) * width; // Always scale to 15 points
+  const xScale = (index) => (index / 14) * width;
   const yScale = (temp) => height - ((temp - 0) / (40 - 0)) * height;
 
   const line = temperatureData.map((point, index) => 
@@ -122,7 +119,7 @@ function CurrentTemperature() {
                 <g key={index} transform={`translate(${xScale(index * 3)}, 0)`}>
                   <line y2="6" stroke="currentColor" />
                   <text y="9" dy="0.71em" textAnchor="middle" fill="currentColor" fontSize="10">
-                    {point.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    {point.time.toLocaleTimeString()}
                   </text>
                 </g>
               ))}
