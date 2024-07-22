@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const initialNotifications = [
   { id: 1, date: '2024-07-22', message: '식물의 꽃이 피었습니다. - 개화 알림', active: true },
@@ -18,9 +18,21 @@ const initialNotifications = [
   { id: 15, date: '2024-07-15', message: '건강검진을 할 때가 되었습니다. - 건강검진 알림', active: true },
 ];
 
-function DashboardCard12() {
+function DashboardCard12({ filteredDate }) {
   const [notifications, setNotifications] = useState(initialNotifications);
   const [visibleWeeks, setVisibleWeeks] = useState(1);
+
+  useEffect(() => {
+    if (filteredDate) {
+      const filteredNotifications = initialNotifications.filter(
+        notification => new Date(notification.date).toDateString() === filteredDate.toDateString()
+      );
+      setNotifications(filteredNotifications);
+      setVisibleWeeks(1);
+    } else {
+      setNotifications(initialNotifications);
+    }
+  }, [filteredDate]);
 
   const handleShowMore = () => {
     setVisibleWeeks(prev => prev + 1);
@@ -53,25 +65,29 @@ function DashboardCard12() {
         <h2 className="font-semibold text-gray-800 dark:text-gray-100">알림</h2>
       </header>
       <div className="p-3">
-        {visibleNotifications.map(date => (
-          <div key={date} className="mb-4 last:mb-0">
-            <header className="text-xs uppercase text-gray-400 dark:text-gray-500 bg-gray-50 dark:bg-gray-700 rounded-sm font-semibold p-2">
-              {new Date(date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })} ({getDayName(date)})
-            </header>
-            <ul className="mt-1">
-              {groupedNotifications[date].map(notification => (
-                <li key={notification.id} className="border-b border-gray-100 dark:border-gray-700 last:border-b-0">
-                  <div className="flex items-center justify-between py-2 px-2">
-                    <div className="flex-grow pr-2 text-sm text-black dark:text-white">
-                      {notification.message}
+        {visibleNotifications.length > 0 ? (
+          visibleNotifications.map(date => (
+            <div key={date} className="mb-4 last:mb-0">
+              <header className="text-xs uppercase text-gray-400 dark:text-gray-500 bg-gray-50 dark:bg-gray-700 rounded-sm font-semibold p-2">
+                {new Date(date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })} ({getDayName(date)})
+              </header>
+              <ul className="mt-1">
+                {groupedNotifications[date].map(notification => (
+                  <li key={notification.id} className="border-b border-gray-100 dark:border-gray-700 last:border-b-0">
+                    <div className="flex items-center justify-between py-2 px-2">
+                      <div className="flex-grow pr-2 text-sm text-black dark:text-white">
+                        {notification.message}
+                      </div>
                     </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-        {visibleNotifications.length < dates.length ? (
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        ) : (
+          <p className="text-center text-gray-500 dark:text-gray-400 py-4">메세지가 없습니다.</p>
+        )}
+        {visibleNotifications.length < dates.length && visibleNotifications.length > 0 && (
           <div className="text-right">
             <button
               onClick={handleShowMore}
@@ -80,7 +96,8 @@ function DashboardCard12() {
               더보기
             </button>
           </div>
-        ) : (
+        )}
+        {visibleNotifications.length === 0 && (
           <div className="text-right text-xs text-gray-500 dark:text-gray-400 py-2">
             더보기가 없습니다.
           </div>
