@@ -14,7 +14,7 @@ function CurrentTemperature() {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get('http://175.205.128.9:9000/test');
+        const response = await axios.get('http://221.160.142.241:9000/test');
         setMessage("연결 성공");
         setMessage(response.data);
         console.log(response.data);
