@@ -16,12 +16,12 @@ function Dashboard() {
 
   const handleDateChange = (dates) => {
     if (dates.length > 0) {
-      setSelectedDate(dates[0]);
+      setSelectedDate(dates);
     }
   };
 
   const handleAddView = () => {
-    if (selectedDate) {
+    if (selectedDate && selectedDate.length === 2) {
       setFilteredDate(selectedDate);
     }
   };
@@ -38,8 +38,10 @@ function Dashboard() {
 
         <main className="grow">
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
+
             {/* Dashboard actions */}
             <div className="sm:flex sm:justify-between sm:items-center mb-8">
+
               {/* Left: Title */}
               <div className="mb-4 sm:mb-0">
                 <h1 className="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">메세지</h1>
@@ -62,6 +64,7 @@ function Dashboard() {
                   <span className="max-xs:sr-only">Add View</span>
                 </button>                
               </div>
+
             </div>
 
             {/* Cards */}
@@ -69,10 +72,12 @@ function Dashboard() {
               {/* Card (Recent Activity) */}
               <DashboardCard12 filteredDate={filteredDate} />
             </div>
+
           </div>
         </main>
 
         <Banner />
+
       </div>
     </div>
   );

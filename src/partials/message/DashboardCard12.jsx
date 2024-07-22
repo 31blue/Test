@@ -23,14 +23,21 @@ function DashboardCard12({ filteredDate }) {
   const [visibleWeeks, setVisibleWeeks] = useState(1);
 
   useEffect(() => {
-    if (filteredDate) {
-      const filteredNotifications = initialNotifications.filter(
-        notification => new Date(notification.date).toDateString() === filteredDate.toDateString()
-      );
+    if (filteredDate && Array.isArray(filteredDate) && filteredDate.length === 2) {
+      const startDate = new Date(filteredDate[0]);
+      const endDate = new Date(filteredDate[1]);
+      endDate.setHours(23, 59, 59, 999); // 끝 날짜를 해당 일의 마지막 시간으로 설정
+      
+      const filteredNotifications = initialNotifications.filter(notification => {
+        const notificationDate = new Date(notification.date);
+        return notificationDate >= startDate && notificationDate <= endDate;
+      });
+      
       setNotifications(filteredNotifications);
-      setVisibleWeeks(1);
+      setVisibleWeeks(Math.ceil(filteredNotifications.length / 7)); // 모든 필터링된 알림을 표시하기 위해 주 수 조정
     } else {
       setNotifications(initialNotifications);
+      setVisibleWeeks(1);
     }
   }, [filteredDate]);
 
@@ -47,12 +54,7 @@ function DashboardCard12({ filteredDate }) {
   }, {});
 
   const dates = Object.keys(groupedNotifications).sort((a, b) => new Date(b) - new Date(a));
-  const weeks = [];
-  for (let i = 0; i < dates.length; i += 7) {
-    weeks.push(dates.slice(i, i + 7));
-  }
-
-  const visibleNotifications = weeks.slice(0, visibleWeeks).flat();
+  const visibleDates = dates.slice(0, visibleWeeks * 7);
 
   const getDayName = (dateString) => {
     const date = new Date(dateString);
@@ -65,8 +67,8 @@ function DashboardCard12({ filteredDate }) {
         <h2 className="font-semibold text-gray-800 dark:text-gray-100">알림</h2>
       </header>
       <div className="p-3">
-        {visibleNotifications.length > 0 ? (
-          visibleNotifications.map(date => (
+        {visibleDates.length > 0 ? (
+          visibleDates.map(date => (
             <div key={date} className="mb-4 last:mb-0">
               <header className="text-xs uppercase text-gray-400 dark:text-gray-500 bg-gray-50 dark:bg-gray-700 rounded-sm font-semibold p-2">
                 {new Date(date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })} ({getDayName(date)})
@@ -87,7 +89,7 @@ function DashboardCard12({ filteredDate }) {
         ) : (
           <p className="text-center text-gray-500 dark:text-gray-400 py-4">메세지가 없습니다.</p>
         )}
-        {visibleNotifications.length < dates.length && visibleNotifications.length > 0 && (
+        {visibleDates.length < dates.length && (
           <div className="text-right">
             <button
               onClick={handleShowMore}
@@ -95,11 +97,6 @@ function DashboardCard12({ filteredDate }) {
             >
               더보기
             </button>
-          </div>
-        )}
-        {visibleNotifications.length === 0 && (
-          <div className="text-right text-xs text-gray-500 dark:text-gray-400 py-2">
-            더보기가 없습니다.
           </div>
         )}
       </div>
