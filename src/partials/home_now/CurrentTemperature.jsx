@@ -8,7 +8,8 @@ function CurrentTemperature() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
-  const [temperatureData, setTemperatureData] = useState([]);
+  const [data, setData] = useState(null);
+  const [temperatureData, setTemperatureData] = useState(Array(15).fill({ time: new Date(), temp: 0.0 }));
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,9 +17,10 @@ function CurrentTemperature() {
       try {
         const response = await axios.get('http://221.160.142.241:9000/test');
         setMessage("연결 성공");
-        setMessage(response.data);
+        setData(response.data);
         console.log(response.data);
         setError(false);
+        updateTemperatureData(response.data);
       } catch (error) {
         setMessage("연결 실패");
         setError(true);
@@ -29,6 +31,14 @@ function CurrentTemperature() {
 
     fetchData();
   }, []);
+
+  const updateTemperatureData = (data) => {
+    if (typeof data === "string") {
+      const parsedData = data.split(',,').map((temp) => parseFloat(temp));
+      const newTemperatureData = parsedData.map(temp => ({ time: new Date(), temp }));
+      setTemperatureData(newTemperatureData);
+    }
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -73,6 +83,9 @@ function CurrentTemperature() {
         ) : (
           <p className="text-green-500">{message}</p>
         )}
+        <p className="text-green-500">
+          {data ? (Array.isArray(data) ? data.join(', ') : data) : "아직 받지 못했음"}
+        </p>
       </div>
       <div className="p-3" style={{ height: '100%' }}>
         <svg width="100%" height="100%" viewBox={`0 0 ${svgWidth} ${svgHeight}`} preserveAspectRatio="xMidYMid meet">
