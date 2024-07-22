@@ -9,13 +9,13 @@ function CurrentTemperature() {
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
   const [data, setData] = useState(null);
-  const [temperatureData, setTemperatureData] = useState(Array(15).fill({ time: new Date(), temp: 26.70 }));
+  const [temperatureData, setTemperatureData] = useState(Array(10).fill({ time: new Date(), temp: 0.0 }));
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get('http://221.160.142.241:9000/test');
+        const response = await axios.get('http://221.160.142.241:9000/home/temperature-humidity');
         setMessage("연결 성공");
         setData(response.data);
         console.log(response.data);
@@ -30,25 +30,37 @@ function CurrentTemperature() {
     };
 
     fetchData();
-    
-    // Set up interval to fetch data every 2 seconds
-    const interval = setInterval(fetchData, 2000);
-
-    // Clean up interval on component unmount
-    return () => clearInterval(interval);
   }, []);
 
   const updateTemperatureData = (data) => {
     if (typeof data === "string") {
-      const parsedData = data.split(',,').map((temp) => parseFloat(temp));
+      const parsedData = data.split(',').map((temp) => parseFloat(temp.trim()));
       const latestTemp = parsedData[parsedData.length - 1];
+      const firstTemp = parsedData[0];
+      const newTemperatureData = [...temperatureData, { time: new Date(), temp: latestTemp }];
+      if (newTemperatureData.length > 10) newTemperatureData.shift(); // Keep only last 10 data points
       setTemperatureData(prevData => {
-        const newData = [...prevData, { time: new Date(), temp: latestTemp }];
-        if (newData.length > 15) newData.shift(); // Keep only last 15 data points
-        return newData;
+        if (prevData.length === 0) {
+          return [{ time: new Date(), temp: firstTemp }, ...newTemperatureData];
+        } else {
+          return newTemperatureData;
+        }
       });
     }
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const newTemperature = 0.0; // Constant temperature of 0°C
+      setTemperatureData(prevData => {
+        const newData = [...prevData, { time: new Date(), temp: newTemperature }];
+        if (newData.length > 10) newData.shift(); // Keep only last 10 data points
+        return newData;
+      });
+    }, 2000); // Update every 2 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   const svgWidth = 800;
   const svgHeight = 400;
@@ -56,7 +68,7 @@ function CurrentTemperature() {
   const width = svgWidth - margin.left - margin.right;
   const height = svgHeight - margin.top - margin.bottom;
 
-  const xScale = (index) => (index / 14) * width;
+  const xScale = (index) => (index / 9) * width;
   const yScale = (temp) => height - ((temp - 0) / (40 - 0)) * height;
 
   const line = temperatureData.map((point, index) => 
