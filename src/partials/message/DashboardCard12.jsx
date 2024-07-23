@@ -20,7 +20,7 @@ const initialNotifications = [
 
 function DashboardCard12({ filteredDate }) {
   const [notifications, setNotifications] = useState(initialNotifications);
-  const [visibleWeeks, setVisibleWeeks] = useState(1);
+  const [visibleDays, setVisibleDays] = useState(5);
 
   useEffect(() => {
     if (filteredDate && Array.isArray(filteredDate) && filteredDate.length === 2) {
@@ -34,15 +34,15 @@ function DashboardCard12({ filteredDate }) {
       });
       
       setNotifications(filteredNotifications);
-      setVisibleWeeks(Math.ceil(filteredNotifications.length / 7)); // 모든 필터링된 알림을 표시하기 위해 주 수 조정
+      setVisibleDays(5); // 필터링 후 초기 표시 일수를 5일로 설정
     } else {
       setNotifications(initialNotifications);
-      setVisibleWeeks(1);
+      setVisibleDays(5); // 초기 표시 일수를 5일로 설정
     }
   }, [filteredDate]);
 
   const handleShowMore = () => {
-    setVisibleWeeks(prev => prev + 1);
+    setVisibleDays(prev => prev + 5); // 한 번에 5일치를 추가로 표시
   };
 
   const groupedNotifications = notifications.reduce((acc, notification) => {
@@ -54,7 +54,7 @@ function DashboardCard12({ filteredDate }) {
   }, {});
 
   const dates = Object.keys(groupedNotifications).sort((a, b) => new Date(b) - new Date(a));
-  const visibleDates = dates.slice(0, visibleWeeks * 7);
+  const visibleDates = dates.slice(0, visibleDays);
 
   const getDayName = (dateString) => {
     const date = new Date(dateString);
@@ -64,7 +64,7 @@ function DashboardCard12({ filteredDate }) {
   return (
     <div className="col-span-full xl:col-span-6 bg-white dark:bg-gray-800 shadow-sm rounded-xl overflow-hidden">
       <header className="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
-        <h2 className="font-semibold text-gray-800 dark:text-gray-100">알림</h2>
+        <h2 className="font-semibold text-gray-800 dark:text-gray-100">메세지 보관함</h2>
       </header>
       <div className="p-3">
         {visibleDates.length > 0 ? (
@@ -89,7 +89,7 @@ function DashboardCard12({ filteredDate }) {
         ) : (
           <p className="text-center text-gray-500 dark:text-gray-400 py-4">메세지가 없습니다.</p>
         )}
-        {visibleDates.length < dates.length && (
+        {visibleDates.length < dates.length ? (
           <div className="text-right">
             <button
               onClick={handleShowMore}
@@ -98,6 +98,8 @@ function DashboardCard12({ filteredDate }) {
               더보기
             </button>
           </div>
+        ) : (
+          <p className="text-center text-gray-500 dark:text-gray-400 py-4">더보기가 없습니다</p>
         )}
       </div>
     </div>
