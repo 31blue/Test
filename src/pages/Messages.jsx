@@ -5,7 +5,7 @@ import Header from '../partials/Header';
 import FilterButton from '../components/DropdownFilter';
 import Datepicker from '../components/Datepicker';
 
-import DashboardCard12 from '../partials/message/DashboardCard12';
+import MessageSend from '../partials/message/MessageSend';
 
 import Banner from '../partials/Banner';
 
@@ -52,7 +52,7 @@ function Dashboard() {
             {/* Cards */}
             <div className="grid grid-cols-12 gap-6">
               {/* Card (Recent Activity) */}
-              <DashboardCard12 filteredDate={filteredDate} />
+              <MessageSend filteredDate={filteredDate} />
             </div>
 
           </div>

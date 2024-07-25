@@ -18,7 +18,7 @@ const initialNotifications = [
   { id: 15, date: '2024-07-15', message: '건강검진을 할 때가 되었습니다. - 건강검진 알림', active: true },
 ];
 
-function DashboardCard12({ filteredDate }) {
+function MessageSend({ filteredDate }) {
   const [notifications, setNotifications] = useState(initialNotifications);
   const [visibleDays, setVisibleDays] = useState(5);
 
@@ -106,4 +106,4 @@ function DashboardCard12({ filteredDate }) {
   );
 }
 
-export default DashboardCard12;
+export default MessageSend;

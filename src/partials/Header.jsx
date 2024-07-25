@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import SearchModal from '../components/ModalSearch';
 import UserMenu from '../components/DropdownProfile';
 import ThemeToggle from '../components/ThemeToggle';
+import OnOffToggle from '../components/OnOffToggle'; // 새로 추가된 import
 
 function Header({
   sidebarOpen,
@@ -58,8 +59,10 @@ function Header({
               </button>
               <SearchModal id="search-modal" searchId="search" modalOpen={searchModalOpen} setModalOpen={setSearchModalOpen} />
             </div>
+            
             <ThemeToggle />
             {/*  Divider */}
+            <OnOffToggle /> {/* 새로 추가된 OnOffToggle 컴포넌트 */}
             <hr className="w-px h-6 bg-gray-200 dark:bg-gray-700/60 border-none" />
             <UserMenu align="right" />
           </div>

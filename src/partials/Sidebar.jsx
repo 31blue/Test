@@ -51,6 +51,7 @@ function Sidebar({
   return (
     <div className="min-w-fit">
       {/* Sidebar backdrop (mobile only) */}
+      {/* Sidebar backdrop (mobile only) */}
       <div
         className={`fixed inset-0 bg-gray-900 bg-opacity-30 z-40 lg:hidden lg:z-auto transition-opacity duration-200 ${
           sidebarOpen ? "opacity-100" : "opacity-0 pointer-events-none"
@@ -59,51 +60,57 @@ function Sidebar({
       ></div>
 
       {/* Sidebar */}
+      {/* Sidebar */}
+      {/* Sidebar */}
+      {/* Sidebar */}
+      {/* Sidebar */}
+      {/* Sidebar */}
       <div
         id="sidebar"
         ref={sidebar}
         className={`flex lg:!flex flex-col absolute z-40 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 h-[100dvh] overflow-y-scroll lg:overflow-y-auto no-scrollbar w-64 lg:w-20 lg:sidebar-expanded:!w-64 2xl:!w-64 shrink-0 bg-white dark:bg-gray-800 p-4 transition-all duration-200 ease-in-out ${sidebarOpen ? "translate-x-0" : "-translate-x-64"} ${variant === 'v2' ? 'border-r border-gray-200 dark:border-gray-700/60' : 'rounded-r-2xl shadow-sm'}`}
       >
         {/* Sidebar header */}
-        <div className="flex justify-between mb-10 pr-3 sm:px-2">
-          {/* Close button */}
-          <button
-            ref={trigger}
-            className="lg:hidden text-gray-500 hover:text-gray-400"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            aria-controls="sidebar"
-            aria-expanded={sidebarOpen}
-          >
-            <span className="sr-only">Close sidebar</span>
-            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10.7 18.7l1.4-1.4L7.8 13H20v-2H7.8l4.3-4.3-1.4-1.4L4 12z" />
-            </svg>
-          </button>
-          {/* Logo */}
+        <div className="flex justify-end mb-4 pr-3 sm:px-2">
           {/* Logo */}
           <NavLink end to="/home_plantprofile" className="block">
-            <div className="w-9.6 h-9.6 rounded-full overflow-hidden">
+            <div className="w-18 h-18 rounded-full overflow-hidden flex items-center justify-center bg-white">
               <img 
-                src="/src/images/album/android-icon-72x72.png" 
-                
+                src="/public/logo.jpg" //왜 로고가 vercel 연결 상태일 때는 안 뜨는 걸까?? 
                 alt="Logo" 
-                className="w-full h-full object-cover"
+                width={60}  // 명시적인 너비 지정
+                height={65}  // 명시적인 높이 지정
+                className="object-contain" 
               />
             </div>
           </NavLink>
         </div>
 
+        {/* Close button (mobile only) */}
+        <button
+          ref={trigger}
+          className="lg:hidden text-gray-500 hover:text-gray-400 absolute top-4 left-4"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          aria-controls="sidebar"
+          aria-expanded={sidebarOpen}
+        >
+          <span className="sr-only">Close sidebar</span>
+          <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10.7 18.7l1.4-1.4L7.8 13H20v-2H7.8l4.3-4.3-1.4-1.4L4 12z" />
+          </svg>
+        </button>
+
         {/* Links */}
-        <div className="space-y-8">
+        <div className="space-y-3 mt-3">
           {/* Pages group */}
           <div>
-            <h3 className="text-xs uppercase text-gray-400 dark:text-gray-500 font-semibold pl-3">
+            <h3 className="text-xs uppercase text-gray-400 dark:text-gray-500 font-semibold pl-3 mb-2">
               <span className="hidden lg:block lg:sidebar-expanded:hidden 2xl:hidden text-center w-6" aria-hidden="true">
                 •••
               </span>
               <span className="lg:hidden lg:sidebar-expanded:block 2xl:block">GrowMate</span>
             </h3>
-            <ul className="mt-3">
+            <ul className="mt-1">
 
 
 
