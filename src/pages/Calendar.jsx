@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Sidebar from '../partials/Sidebar';
 import Header from '../partials/Header';
 import CalendarMain from '../partials/calendar/CalendarMain';
-import CalendarMainTest from '../partials/calendar/CalendarMainTest';
 import CalendarWatering from '../partials/calendar/CalendarWatering';
 import CalendarFlower from '../partials/calendar/CalendarFlower';
 import Banner from '../partials/Banner';
@@ -45,13 +44,7 @@ function Dashboard() {
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
             <h1 className="text-2xl font-semibold text-slate-800 mb-8">달력</h1>
             <div className="grid grid-cols-12 gap-6">
-              <CalendarMainTest 
-                currentDate={currentDate} 
-                wateredDates={wateredDates}
-                floweringDates={floweringDates}
-                onWatering={handleWatering}
-                onFlowering={handleFlowering}
-              />
+
               <CalendarMain 
                 currentDate={currentDate} 
                 wateredDates={wateredDates}
