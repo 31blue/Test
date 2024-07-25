@@ -91,13 +91,19 @@ function Album01() {
             </div>
           </div>
         ))}
-        {displayCount < images.length && (
+        {displayCount < images.length ? (
           <div 
             className="w-full h-32 bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden flex items-center justify-center cursor-pointer"
             onClick={handleShowMore}
           >
             <span className="text-gray-600 dark:text-gray-300">더보기</span>
           </div>
+        ) : (
+          images.length > 0 && (
+            <div className="w-full h-32 bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden flex items-center justify-center">
+              <span className="text-gray-600 dark:text-gray-300">더보기가 없습니다.</span>
+            </div>
+          )
         )}
       </div>
       {selectedImage && (
