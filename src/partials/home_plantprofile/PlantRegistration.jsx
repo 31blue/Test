@@ -1,8 +1,8 @@
 import React from 'react';
 
 function PlantRegistration({ date }) {
-  // Use the provided date or default to '2024-08-07' if it's undefined or an empty string
-  const displayDate = date && date.trim() !== '' ? date : '2024-08-07';
+  // Use the provided date or default to '2024-07-25' if it's undefined or an empty string
+  const displayDate = date && date.trim() !== '' ? date : '2024-07-25';
 
   console.log('DashboardCardPlantRegistration', { date: displayDate });
 

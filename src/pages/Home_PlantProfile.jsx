@@ -18,7 +18,7 @@ function Dashboard() {
     image: '/images/album/michael-benz--IZ2sgQKIhM-unsplash.jpg',
     name: '바질01', // 기본값을 '바질01'로 변경
     species: '바질 (Basil)',
-    registrationDate: '2023-07-15',
+    registrationDate: '2024-07-25', // 기본 등록 날짜 설정
     height: '50cm',
     leafCount: 7,
     leafArea: '30cm²',
@@ -60,10 +60,19 @@ function Dashboard() {
                       <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
                     </svg>
                     {showTooltip && (
-                      <div className="absolute left-1/2 transform -translate-x-1/2 top-full mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg p-4 text-sm text-gray-600 z-10 text-justify">
-                        식물의 프로필입니다. 
+                      <div className="absolute left-0 transform -translate-x-1/4 top-full mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-lg p-4 text-sm text-gray-600 z-10">
+                        <p className="mb-2">식물의 프로필 페이지입니다</p>
                         <br></br>
-                        <br></br> 물리적 특성 중 크기는 객체 인식으로 구한 값입니다.
+                        <ul className="list-disc list-inside mb-2">
+                          <li>프로필 사진: 최신 촬영 이미지로 자동 갱신됩니다.</li>
+                          <li>식물 이름: 사용자 지정 가능하며,
+                            <ul className="list-circle list-inside ml-4 mt-1">
+                              <li>최대 10자까지 입력 가능</li>
+                              <li>한글, 영문자, 숫자만 사용 가능합니다.</li>
+                            </ul>
+                          </li>
+                        </ul>
+                        <p>물리적 특성 중 크기는 객체 인식 기술을 통해 자동으로 측정된 값입니다.</p>
                       </div>
                     )}
                   </div>
@@ -79,7 +88,7 @@ function Dashboard() {
                 initialName={plantData.name} 
                 registrationDate={plantData.registrationDate}
               />
-              <PlantSpecies species={plantData.species} />
+              <PlantSpecies />
               <PlantRegistration date={plantData.registrationDate} />
               <PlantPhysical
                 height={plantData.height}
