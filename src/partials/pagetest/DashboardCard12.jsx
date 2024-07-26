@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { tailwindConfig, hexToRGB } from '../../utils/Utils';
+import Dashboard from '../../pages/PageTest';
 
-function DashboardCard12({ filteredDate }) {
+function DashboardCard12({ temp }) {
   const [counter, setCounter] = useState(0);
   const [currentTemp, setCurrentTemp] = useState(0);
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
   const [tempData, setTempData] = useState(Array(10).fill({ time: new Date(), temp: 0 }));
 
   const minTemp = 0;
-  const maxTemp = 50;
+  const maxTemp = 100;  // Changed to 100
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -19,16 +20,16 @@ function DashboardCard12({ filteredDate }) {
   }, []);
 
   useEffect(() => {
-    // 여기서 실제 데이터를 가져오는 로직을 구현해야 합니다.
-    // 지금은 임시로 랜덤 데이터를 생성합니다.
-    const newTemp = Math.random() * (maxTemp - minTemp) + minTemp;
-    setCurrentTemp(newTemp);
-    setTempData(prevData => {
-      const newData = [...prevData, { time: new Date(), temp: newTemp }];
-      if (newData.length > 10) newData.shift();
-      return newData;
-    });
-  }, [counter]);
+    if (temp && temp.length > 0) {
+      const newTemp = parseFloat(temp[0]);
+      setCurrentTemp(newTemp);
+      setTempData(prevData => {
+        const newData = [...prevData, { time: new Date(), temp: newTemp }];
+        if (newData.length > 10) newData.shift();
+        return newData;
+      });
+    }
+  }, [counter, temp]);
 
   const progressPercentage = ((currentTemp - minTemp) / (maxTemp - minTemp)) * 100;
   const circumference = 2 * Math.PI * 48.6;
@@ -52,10 +53,10 @@ function DashboardCard12({ filteredDate }) {
   const gradientId = "tempGradient";
 
   return (
-    <div className="col-span-full xl:col-span-6 bg-white dark:bg-gray-800 shadow-sm rounded-xl">
+    <div className="flex flex-col col-span-full sm:col-span-12 bg-white dark:bg-gray-800 shadow-sm rounded-xl">
       <header className="px-5 py-4 border-b border-gray-100 dark:border-gray-700/60 flex items-center justify-between">
         <h2 className="font-semibold text-gray-800 dark:text-gray-100">이산화탄소 테스트</h2>
-        <span className="text-sm text-gray-500 dark:text-gray-400">범위: {minTemp} ppm - {maxTemp}ppm</span>
+        <span className="text-sm text-gray-500 dark:text-gray-400">범위: {minTemp} - {maxTemp}</span>
       </header>
       <div className="px-5 py-3">
         <div className="flex items-center justify-between mb-4">
@@ -84,7 +85,7 @@ function DashboardCard12({ filteredDate }) {
             </svg>
             <div className="ml-4">
               <div className="text-3xl font-bold text-gray-800 dark:text-gray-100">
-                {currentTemp.toFixed(1)}°C
+                {currentTemp.toFixed(1)}
               </div>
               <div className="text-sm text-gray-500 dark:text-gray-400 mt-2">
                 {currentDateTime.toLocaleString()}
@@ -113,11 +114,11 @@ function DashboardCard12({ filteredDate }) {
                 />
               ))}
               <g className="axis-y" transform={`translate(0, 0)`}>
-                {[0, 10, 20, 30, 40, 50].map((tick) => (
+                {[0, 20, 40, 60, 80, 100].map((tick) => (
                   <g key={tick} transform={`translate(0, ${yScale(tick)})`}>
                     <line x2={width} stroke="currentColor" strokeDasharray="2,2" />
                     <text x="-9" dy="0.32em" textAnchor="end" fill="currentColor" fontSize="15">
-                      {tick}°C
+                      {tick}
                     </text>
                   </g>
                 ))}
