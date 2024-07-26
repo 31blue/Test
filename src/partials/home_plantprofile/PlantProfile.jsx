@@ -23,6 +23,8 @@ function PlantProfile({ plantData, updatePlantName }) {
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         setDDay(diffDays);
       }
+    } else {
+      setActiveAccount(null); // 통신이 끊기면 모든 계정 버튼 비활성화
     }
   }, [plantData]);
 
@@ -33,21 +35,24 @@ function PlantProfile({ plantData, updatePlantName }) {
 
   const handleNameChange = (e) => {
     const newName = e.target.value;
+
     if (newName.length > 10) {
       setErrorMessage('이름은 10자리 이하만 가능합니다.');
       return;
     }
-    if (!/^[가-힣a-zA-Z0-9]+$/.test(newName)) {
+
+    if (!/^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9]*$/.test(newName)) {
       setErrorMessage('한글, 영어, 숫자만 사용할 수 있습니다.');
       return;
     }
+
     setName(newName);
     setErrorMessage('');
   };
 
   const toggleEdit = () => {
     if (isEditing) {
-      if (name.length === 0) {
+      if (name.trim().length === 0) {
         setErrorMessage('이름을 입력해주세요.');
         return;
       }
@@ -62,10 +67,10 @@ function PlantProfile({ plantData, updatePlantName }) {
       <div className="p-6">
         <div className="flex flex-col items-center">
           <div className="w-64 h-64 mb-6 overflow-hidden rounded-full relative group shadow-lg">
-            <img 
-              src={imgSrc} 
-              alt={name} 
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" 
+            <img
+              src={imgSrc}
+              alt={name}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
               onError={onError}
             />
             {plantData && plantData.plant_register && (
@@ -91,8 +96,8 @@ function PlantProfile({ plantData, updatePlantName }) {
               <button
                 onClick={toggleEdit}
                 className={`px-3 py-1 text-sm font-medium rounded-full transition-colors duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 whitespace-nowrap w-16 ${
-                  isEditing 
-                    ? 'bg-green-500 text-white hover:bg-green-600' 
+                  isEditing
+                    ? 'bg-green-500 text-white hover:bg-green-600'
                     : 'text-green-500 border border-green-500 hover:bg-green-50 dark:hover:bg-gray-700'
                 }`}
               >
