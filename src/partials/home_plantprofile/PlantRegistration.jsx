@@ -1,8 +1,20 @@
 import React from 'react';
 
+function formatDate(dateString) {
+  if (!dateString) return '2024-07-25'; // 기본값
+
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return '2024-07-25'; // 유효하지 않은 날짜인 경우 기본값 반환
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
+
 function PlantRegistration({ date }) {
-  // Use the provided date or default to '2024-07-25' if it's undefined or an empty string
-  const displayDate = date && date.trim() !== '' ? date : '2024-07-25';
+  const displayDate = formatDate(date);
 
   console.log('DashboardCardPlantRegistration', { date: displayDate });
 

@@ -1,10 +1,11 @@
 import React from 'react';
 
-function PlantPhysical({ height }) {
-  // 기본값 설정
-  const displayHeight = height || '10cm';
+function PlantPhysical({ plantData }) {
+  // plantData에서 plant_height 정보를 가져옴
+  const displayHeight = plantData && plantData.plant_height ? `${plantData.plant_height}cm` : '정보 없음';
 
-  console.log('PlantPhysical', { height: displayHeight });
+  // plantData를 콘솔에 출력하여 확인
+  console.log('PlantPhysical', { height: displayHeight, plantData });
 
   return (
     <div className="col-span-full sm:col-span-6 xl:col-span-4 bg-white dark:bg-gray-800 shadow-sm rounded-xl">

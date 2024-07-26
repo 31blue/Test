@@ -21,7 +21,7 @@ function Dashboard() {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get('http://192.168.0.21:8000/home/temperature-humidity');
+        const response = await axios.get('http://192.168.0.21:8000/temperature-humidity');
         setMessage("연결 성공");
         setTemperatureData(response.data.temperature);
         setHumidityData(response.data.humidity);
