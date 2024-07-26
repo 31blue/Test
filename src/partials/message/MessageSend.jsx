@@ -3,24 +3,25 @@ import React, { useState, useEffect } from 'react';
 const initialNotifications = [
   { id: 1, date: '2024-07-22', message: '식물의 꽃이 피었습니다. - 개화 알림', active: true },
   { id: 2, date: '2024-07-22', message: '곤충이 발견되었습니다. - 병충해 알림', active: true },
-  { id: 3, date: '2024-07-21', message: '건강검진을 할 때가 되었습니다. - 건강검진 알림', active: true },
-  { id: 4, date: '2024-07-21', message: '방금 물주기를 하셨나요? - 물주기 알림', active: true },
-  { id: 5, date: '2024-07-20', message: '식물의 꽃이 피었습니다. - 개화 알림', active: true },
-  { id: 6, date: '2024-07-20', message: '곤충이 발견되었습니다. - 병충해 알림', active: true },
-  { id: 7, date: '2024-07-19', message: '건강검진을 할 때가 되었습니다. - 건강검진 알림', active: true },
-  { id: 8, date: '2024-07-19', message: '방금 물주기를 하셨나요? - 물주기 알림', active: true },
-  { id: 9, date: '2024-07-18', message: '식물의 꽃이 피었습니다. - 개화 알림', active: true },
-  { id: 10, date: '2024-07-18', message: '곤충이 발견되었습니다. - 병충해 알림', active: true },
-  { id: 11, date: '2024-07-17', message: '건강검진을 할 때가 되었습니다. - 건강검진 알림', active: true },
+  { id: 3, date: '2024-07-21', message: '방금 물주기를 하셨나요? - 물주기 알림', active: true },
+  { id: 4, date: '2024-07-21', message: '식물의 꽃이 피었습니다. - 개화 알림', active: true },
+  { id: 5, date: '2024-07-20', message: '곤충이 발견되었습니다. - 병충해 알림', active: true },
+  { id: 6, date: '2024-07-20', message: '방금 물주기를 하셨나요? - 물주기 알림', active: true },
+  { id: 7, date: '2024-07-19', message: '식물의 꽃이 피었습니다. - 개화 알림', active: true },
+  { id: 8, date: '2024-07-19', message: '곤충이 발견되었습니다. - 병충해 알림', active: true },
+  { id: 9, date: '2024-07-18', message: '방금 물주기를 하셨나요? - 물주기 알림', active: true },
+  { id: 10, date: '2024-07-18', message: '식물의 꽃이 피었습니다. - 개화 알림', active: true },
+  { id: 11, date: '2024-07-17', message: '곤충이 발견되었습니다. - 병충해 알림', active: true },
   { id: 12, date: '2024-07-17', message: '방금 물주기를 하셨나요? - 물주기 알림', active: true },
   { id: 13, date: '2024-07-16', message: '식물의 꽃이 피었습니다. - 개화 알림', active: true },
   { id: 14, date: '2024-07-16', message: '곤충이 발견되었습니다. - 병충해 알림', active: true },
-  { id: 15, date: '2024-07-15', message: '건강검진을 할 때가 되었습니다. - 건강검진 알림', active: true },
+  { id: 15, date: '2024-07-15', message: '방금 물주기를 하셨나요? - 물주기 알림', active: true },
 ];
 
 function MessageSend({ filteredDate }) {
   const [notifications, setNotifications] = useState(initialNotifications);
   const [visibleDays, setVisibleDays] = useState(5);
+  const [isAlarmOn, setIsAlarmOn] = useState(false);
 
   useEffect(() => {
     if (filteredDate && Array.isArray(filteredDate) && filteredDate.length === 2) {
@@ -63,8 +64,25 @@ function MessageSend({ filteredDate }) {
 
   return (
     <div className="col-span-full xl:col-span-6 bg-white dark:bg-gray-800 shadow-sm rounded-xl overflow-hidden">
-      <header className="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
+      <header className="px-5 py-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
         <h2 className="font-semibold text-gray-800 dark:text-gray-100">메세지 보관함</h2>
+        <div className="flex items-center">
+          <div
+            className={`w-14 h-7 flex items-center rounded-full p-1 cursor-pointer ${
+              isAlarmOn ? 'bg-green-500' : 'bg-gray-300'
+            }`}
+            onClick={() => setIsAlarmOn(!isAlarmOn)}
+          >
+            <div
+              className={`bg-white w-5 h-5 rounded-full shadow-md transform transition-transform duration-300 ease-in-out ${
+                isAlarmOn ? 'translate-x-7' : ''
+              }`}
+            ></div>
+          </div>
+          <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+            {isAlarmOn ? 'Alarm ON' : 'Alarm OFF'}
+          </span>
+        </div>
       </header>
       <div className="p-3">
         {visibleDates.length > 0 ? (
