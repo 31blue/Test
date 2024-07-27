@@ -10,7 +10,12 @@ import Banner from '../partials/Banner';
 
 function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [plantData, setPlantData] = useState(null);
+  const [plantData, setPlantData] = useState({
+    id: '',
+    plant_profile_name: '',
+    plant_register: '',
+    // 다른 필요한 기본 필드들을 추가하세요
+  });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showTooltip, setShowTooltip] = useState(false);
@@ -48,9 +53,6 @@ function Dashboard() {
   const toggleTooltip = () => {
     setShowTooltip(!showTooltip);
   };
-
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -100,21 +102,18 @@ function Dashboard() {
             </div>
             
             <div className="grid grid-cols-12 gap-6">
-              {plantData && (
-                <PlantProfile 
-                  plantData={plantData} 
-                  updatePlantName={updatePlantName} 
-                  id={plantData.id} // id를 추가했습니다
-                />
-              )}
+              <PlantProfile 
+                plantData={plantData} 
+                updatePlantName={updatePlantName} 
+                id={plantData.id}
+              />
               <PlantSpecies />
-              {plantData && (
-                <PlantRegistration date={plantData.plant_register} />
-              )}
-              {plantData && (
-                <PlantPhysical plantData={plantData} />
-              )}
+              <PlantRegistration date={plantData.plant_register} />
+              <PlantPhysical plantData={plantData} />
             </div>
+
+            {isLoading && <div>Loading...</div>}
+            {error && <div className="text-red-500">{error}</div>}
           </div>
         </main>
         
