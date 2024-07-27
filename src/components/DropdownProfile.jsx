@@ -88,17 +88,18 @@ function DropdownProfile({ align }) {
             {loading ? (
               <li className="text-center py-2">Loading...</li>
             ) : (
-              plantProfiles.map((profile) => (
+              plantProfiles.map((profile, index) => (
                 <li key={profile.id}>
                   <Link
-                    className={`font-medium text-sm ${profile.id === activeProfileId ? 'text-green-500' : 'text-gray-800'} hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center py-1 px-3`}
+                    className={`font-medium text-sm ${profile.id === activeProfileId ? 'text-green-500' : 'text-gray-800'} hover:text-gray-400 dark:hover:text-gray-500 flex items-center justify-between py-1 px-3`}
                     to="/Home_PlantProfile"
                     onClick={() => {
                       setActiveProfileId(profile.id);
                       setDropdownOpen(false);
                     }}
                   >
-                    {profile.plant_profile_name}
+                    <span>{profile.plant_profile_name}</span>
+                    <span className="text-xs text-gray-400 italic ml-2">계정{index + 1}</span>
                   </Link>
                 </li>
               ))
