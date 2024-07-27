@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import defaultImage from '../../images/album/michael-benz--IZ2sgQKIhM-unsplash.jpg';
 
-function PlantProfile({ plantData, updatePlantName }) {
+function PlantProfile({ plantData, updatePlantName, profiles, setActiveProfileId }) {
   const [imgSrc, setImgSrc] = useState(defaultImage);
   const [name, setName] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [dDay, setDDay] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
-  const [activeAccount, setActiveAccount] = useState(null);
 
   useEffect(() => {
     if (plantData) {
-      const { id, plant_register, plant_profile_name, plant_profile_photo } = plantData;
+      const { plant_register, plant_profile_name, plant_profile_photo } = plantData;
       setImgSrc(plant_profile_photo || defaultImage);
       setName(plant_profile_name || '바질01');
-      setActiveAccount(id);
 
       if (plant_register) {
         const today = new Date();
@@ -23,8 +21,6 @@ function PlantProfile({ plantData, updatePlantName }) {
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         setDDay(diffDays);
       }
-    } else {
-      setActiveAccount(null); // 통신이 끊기면 모든 계정 버튼 비활성화
     }
   }, [plantData]);
 
@@ -56,7 +52,7 @@ function PlantProfile({ plantData, updatePlantName }) {
         setErrorMessage('이름을 입력해주세요.');
         return;
       }
-      updatePlantName(name);
+      updatePlantName(name, plantData.id);
     }
     setIsEditing(!isEditing);
     setErrorMessage('');
@@ -105,17 +101,17 @@ function PlantProfile({ plantData, updatePlantName }) {
               </button>
             </div>
             <div className="flex space-x-2 mt-4">
-              {[1, 2, 3].map((id) => (
+              {profiles.map(profile => (
                 <button
-                  key={id}
+                  key={profile.id}
+                  onClick={() => setActiveProfileId(profile.id)}
                   className={`px-4 py-2 rounded-full ${
-                    activeAccount === id
+                    plantData.id === profile.id
                       ? 'bg-green-500 text-white'
                       : 'bg-gray-200 text-gray-700'
-                  } ${!plantData && 'opacity-50 cursor-not-allowed'}`}
-                  disabled={!plantData}
+                  }`}
                 >
-                  계정 {id}
+                  {profile.plant_profile_name}
                 </button>
               ))}
             </div>

@@ -2,12 +2,30 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Transition from '../utils/Transition';
 import UserAvatar from '../images/user-avatar-32.png';
+import axios from 'axios';
 
-function DropdownProfile({ align, plantName }) {
+function DropdownProfile({ align }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [plantProfiles, setPlantProfiles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [activeProfileId, setActiveProfileId] = useState(1); // 기본값을 1로 설정
 
   const trigger = useRef(null);
   const dropdown = useRef(null);
+
+  useEffect(() => {
+    const fetchPlantProfiles = async () => {
+      try {
+        const response = await axios.get('http://192.168.0.21:8000/');
+        setPlantProfiles(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching plant profiles:', error);
+        setLoading(false);
+      }
+    };
+    fetchPlantProfiles();
+  }, []);
 
   // close on click outside
   useEffect(() => {
@@ -67,33 +85,24 @@ function DropdownProfile({ align, plantName }) {
             <div className="text-xs text-gray-500 dark:text-gray-400 italic">여러 식물을 관리하세요!</div>
           </div>
           <ul>
-            <li>
-              <Link
-                className="font-medium text-sm text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center py-1 px-3"
-                to="/Home_PlantProfile"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-              >
-                바질01
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="font-medium text-sm text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center py-1 px-3"
-                to="/Home_PlantProfile"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-              >
-                바질02
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="font-medium text-sm text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center py-1 px-3"
-                to="/Home_PlantProfile"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-              >
-                바질03
-              </Link>
-            </li>
+            {loading ? (
+              <li className="text-center py-2">Loading...</li>
+            ) : (
+              plantProfiles.map((profile) => (
+                <li key={profile.id}>
+                  <Link
+                    className={`font-medium text-sm ${profile.id === activeProfileId ? 'text-green-500' : 'text-gray-800'} hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center py-1 px-3`}
+                    to="/Home_PlantProfile"
+                    onClick={() => {
+                      setActiveProfileId(profile.id);
+                      setDropdownOpen(false);
+                    }}
+                  >
+                    {profile.plant_profile_name}
+                  </Link>
+                </li>
+              ))
+            )}
           </ul>
         </div>
       </Transition>

@@ -10,12 +10,8 @@ import Banner from '../partials/Banner';
 
 function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [plantData, setPlantData] = useState({
-    id: '',
-    plant_profile_name: '',
-    plant_register: '',
-    // 다른 필요한 기본 필드들을 추가하세요
-  });
+  const [plantProfiles, setPlantProfiles] = useState([]);
+  const [activeProfileId, setActiveProfileId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showTooltip, setShowTooltip] = useState(false);
@@ -24,7 +20,8 @@ function Dashboard() {
     const fetchData = async () => {
       try {
         const response = await axios.get('http://192.168.0.21:8000/');
-        setPlantData(response.data);
+        setPlantProfiles(response.data);
+        setActiveProfileId(response.data[0]?.id || null); // Set the first profile as active
         setIsLoading(false);
       } catch (err) {
         setError('Failed to fetch plant data');
@@ -35,14 +32,15 @@ function Dashboard() {
     fetchData();
   }, []);
 
-  const updatePlantName = async (newName) => {
-    setPlantData(prevData => ({
-      ...prevData,
-      plant_profile_name: newName
-    }));
+  const updatePlantName = async (newName, id) => {
+    setPlantProfiles(prevProfiles =>
+      prevProfiles.map(profile =>
+        profile.id === id ? { ...profile, plant_profile_name: newName } : profile
+      )
+    );
 
     try {
-      await axios.post('http://192.168.0.21:8000/update-name', { name: newName });
+      await axios.post(`http://192.168.0.21:8000/update-name`, { id, name: newName });
       // 성공 메시지 표시
     } catch (error) {
       console.error('Failed to update name in database', error);
@@ -53,6 +51,8 @@ function Dashboard() {
   const toggleTooltip = () => {
     setShowTooltip(!showTooltip);
   };
+
+  const activeProfile = plantProfiles.find(profile => profile.id === activeProfileId);
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -102,14 +102,18 @@ function Dashboard() {
             </div>
             
             <div className="grid grid-cols-12 gap-6">
-              <PlantProfile 
-                plantData={plantData} 
-                updatePlantName={updatePlantName} 
-                id={plantData.id}
-              />
+              {activeProfile && (
+                <PlantProfile 
+                  plantData={activeProfile} 
+                  updatePlantName={updatePlantName} 
+                  id={activeProfile.id}
+                  profiles={plantProfiles}
+                  setActiveProfileId={setActiveProfileId}
+                />
+              )}
               <PlantSpecies />
-              <PlantRegistration date={plantData.plant_register} />
-              <PlantPhysical plantData={plantData} />
+              {activeProfile && <PlantRegistration date={activeProfile.plant_register} />}
+              {activeProfile && <PlantPhysical plantData={activeProfile} />}
             </div>
 
             {isLoading && <div>Loading...</div>}
