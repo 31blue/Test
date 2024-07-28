@@ -5,7 +5,7 @@ function DailyPhotosynthesis() {
   const [photosynthesisData, setPhotosynthesisData] = useState([]);
   const [maxPhotosynthesis, setMaxPhotosynthesis] = useState({ time: '', value: 0 });
   const [tooltip, setTooltip] = useState({ visible: false, x: 0, y: 0, data: null });
-  
+
   // Get yesterday's date in YYYY-MM-DD format
   const getYesterdayDate = () => {
     const today = new Date();
@@ -23,7 +23,7 @@ function DailyPhotosynthesis() {
       let maxData = { time: '', value: 0 };
 
       for (let i = 0; i < 24; i++) {
-        const value = Math.random() * 100;
+        const value = Math.random() * 100; // 광합성량 단위는 μmol m⁻² s⁻¹
         data.push({ time: `${i}시`, value });
 
         if (value > maxData.value) {
@@ -85,7 +85,7 @@ function DailyPhotosynthesis() {
           어제({getYesterdayDate()})의 광합성량입니다.
         </h2>
         <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-          어느 시간대에 가장 활발히 광합성을 하는지 확인해보세요!
+          가장 활발한 광합성량이 이루어지는 시간대를 확인해보세요!
         </p>
       </header>
       <div className="p-3">

@@ -85,7 +85,7 @@ function DailyEvapotranspiration() {
           어제({getYesterdayDate()})의 증발산량입니다.
         </h2>
         <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-          가장 활발한 증발산량을 확인해보세요!
+          가장 활발한 증발산량이 이루어지는 시간대를 확인해보세요!
         </p>
       </header>
       <div className="p-3">
