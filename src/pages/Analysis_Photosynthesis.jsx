@@ -88,7 +88,7 @@ function Analysis_Photosynthesis() {
               <Testephoto plantData={plantData.day_avg_photo} isLoading={isLoading} error={error} />
               <DailyPhotosynthesis plantData={plantData.hour_avg_photo}/>
               <TotalPhotosynthesis />
-              <WeeklyPhotosynthesis />
+              <WeeklyPhotosynthesis plantData={plantData.day_avg_photo}/>
               <DailyOxygen />
             </div>
           </div>
