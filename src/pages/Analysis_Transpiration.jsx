@@ -4,11 +4,13 @@ import Sidebar from '../partials/Sidebar';
 import Header from '../partials/Header';
 import Banner from '../partials/Banner';
 import TestAgain from '../partials/analysis_transpiration/TestAgain';
-import Testevapo from '../partials/analysis_transpiration/Testevapo';
+import DailyEvapotranspiration from '../partials/analysis_transpiration/DailyEvapotranspiration';
+import TotalEvapotranspiration from '../partials/analysis_transpiration/TotalEvapotranspiration';
+import WeeklyEvapotranspiration from '../partials/analysis_transpiration/WeeklyEvapotranspiration';
+import DailyWaterIntake from '../partials/analysis_transpiration/DailyWaterIntake';
 
 axios.defaults.baseURL = 'http://192.168.0.21:8000';
 axios.defaults.withCredentials = true;
-
 
 function Analysis_Evapotranspiration() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -18,11 +20,11 @@ function Analysis_Evapotranspiration() {
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
         const response = await axios.get('/evapo/1', {
           withCredentials: true
         });
-        console.log('hihihi')
         setPlantData(response.data);
         setError(null);
       } catch (error) {
@@ -31,7 +33,6 @@ function Analysis_Evapotranspiration() {
       }
       setIsLoading(false);
     };
-
     fetchData();
   }, []);
 
@@ -50,8 +51,11 @@ function Analysis_Evapotranspiration() {
               </div>
             </div>
             <div className="grid grid-cols-12 gap-6">
-              <TestAgain plantData={plantData} isLoading={isLoading} error={error} />
-              <Testevapo plantData={plantData} isLoading={isLoading} error={error} />
+              <TestAgain hour_avg_evapo={plantData.hour_avg_evapo} />
+              <DailyEvapotranspiration hour_avg_evapo={plantData.hour_avg_evapo} />
+              <TotalEvapotranspiration />
+              <WeeklyEvapotranspiration />
+              <DailyWaterIntake waterAmount={waterIntakeAmount} />
             </div>
           </div>
         </main>

@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { tailwindConfig, hexToRGB } from '../../utils/Utils';
+import axios from 'axios';
 
 function DailyEvapotranspiration() {
   const [evapotranspirationData, setEvapotranspirationData] = useState([]);
   const [maxEvapotranspiration, setMaxEvapotranspiration] = useState({ time: '', value: 0 });
   const [tooltip, setTooltip] = useState({ visible: false, x: 0, y: 0, data: null });
-  
-  // Get yesterday's date in YYYY-MM-DD format
+  const dashboardRef = useRef(null);
+
   const getYesterdayDate = () => {
     const today = new Date();
     const yesterday = new Date(today);
@@ -18,24 +19,31 @@ function DailyEvapotranspiration() {
   };
 
   useEffect(() => {
-    const generateData = () => {
-      const data = [];
-      let maxData = { time: '', value: 0 };
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('/evapo/1', {
+          withCredentials: true
+        });
+        const newData = response.data.hour_avg_evapo.slice(-24).map(value => {
+          return +(Math.round((value + 10) * 10000) / 10000).toFixed(4);
+        });
 
-      for (let i = 0; i < 24; i++) {
-        const value = Math.random() * 10; // 증발산량 단위는 mm/h
-        data.push({ time: `${i}시`, value });
+        const processedData = newData.map((value, index) => ({
+          time: `${index}시`,
+          value: value
+        }));
 
-        if (value > maxData.value) {
-          maxData = { time: `${i}시`, value };
-        }
+        setEvapotranspirationData(processedData);
+
+        const maxData = processedData.reduce((max, item) => 
+          item.value > max.value ? item : max, { time: '', value: 0 });
+        setMaxEvapotranspiration(maxData);
+
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
-
-      setEvapotranspirationData(data);
-      setMaxEvapotranspiration(maxData);
     };
-
-    generateData();
+    fetchData();
   }, []);
 
   const svgWidth = 800;
@@ -45,7 +53,7 @@ function DailyEvapotranspiration() {
   const height = svgHeight - margin.top - margin.bottom;
 
   const xScale = (index) => (index / 23) * width;
-  const yScale = (value) => height - (value / 10) * height;
+  const yScale = (value) => height - (value / 15) * height;
 
   const line = evapotranspirationData
     .map((point, index) =>
@@ -57,10 +65,22 @@ function DailyEvapotranspiration() {
   const gradientId = "evapotranspirationGradient";
 
   const handleMouseOver = (event, point) => {
-    const { clientX, clientY } = event;
     const svgRect = event.target.ownerSVGElement.getBoundingClientRect();
-    const x = xScale(evapotranspirationData.indexOf(point)) + margin.left;
-    const y = yScale(point.value) + margin.top;
+    const dashboardRect = dashboardRef.current.getBoundingClientRect();
+    let x = xScale(evapotranspirationData.indexOf(point)) + margin.left;
+    let y = yScale(point.value) + margin.top;
+
+    const tooltipWidth = 100;
+    const tooltipHeight = 50;
+
+    if (x + tooltipWidth > dashboardRect.width) {
+      x = dashboardRect.width - tooltipWidth;
+    }
+
+    if (y + tooltipHeight > dashboardRect.height) {
+      y = dashboardRect.height - tooltipHeight;
+    }
+
     setTooltip({
       visible: true,
       x,
@@ -70,16 +90,11 @@ function DailyEvapotranspiration() {
   };
 
   const handleMouseOut = () => {
-    setTooltip({
-      visible: false,
-      x: 0,
-      y: 0,
-      data: null,
-    });
+    setTooltip({ visible: false, x: 0, y: 0, data: null });
   };
 
   return (
-    <div className="relative col-span-full xl:col-span-8 bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700">
+    <div ref={dashboardRef} className="relative col-span-full xl:col-span-8 bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700">
       <header className="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
         <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
           어제({getYesterdayDate()})의 증발산량입니다.
@@ -111,7 +126,7 @@ function DailyEvapotranspiration() {
               />
             ))}
             <g className="axis-y" transform={`translate(0, 0)`}>
-              {[0, 2, 4, 6, 8, 10].map((tick) => (
+              {[0, 3, 6, 9, 12, 15].map((tick) => (
                 <g key={tick} transform={`translate(0, ${yScale(tick)})`}>
                   <line x2={width} stroke="currentColor" strokeDasharray="2,2" />
                   <text x="-9" dy="0.32em" textAnchor="end" fill="currentColor" fontSize="10">
@@ -122,7 +137,7 @@ function DailyEvapotranspiration() {
             </g>
             <g className="axis-x" transform={`translate(0, ${height})`}>
               {Array.from({ length: 8 }).map((_, index) => {
-                const time = `${index * 3}시`; // 3시간 간격
+                const time = `${index * 3}시`;
                 return (
                   <g key={index} transform={`translate(${xScale(index * 3)}, 0)`}>
                     <line y2="6" stroke="currentColor" />
@@ -140,17 +155,18 @@ function DailyEvapotranspiration() {
             className="absolute text-xs p-2 rounded shadow-lg"
             style={{
               top: tooltip.y,
-              left: tooltip.x + margin.left + 10,
-              backgroundColor: 'rgba(200, 255, 200, 0.8)', // 아주 연한 초록색 배경
-              border: '1px solid rgba(100, 200, 100, 0.8)', // 살짝 진한 초록색 테두리
+              left: tooltip.x,
+              backgroundColor: 'rgba(173, 216, 230, 0.8)',
+              border: '1px solid rgba(70, 130, 180, 0.8)',
+              color: 'rgba(0, 0, 139, 1)',
             }}
           >
             <div>{tooltip.data.time}</div>
-            <div>{tooltip.data.value.toFixed(2)} mm/h</div>
+            <div>{tooltip.data.value.toFixed(4)} mm/h</div>
           </div>
         )}
         <div className="text-center mt-4 text-sm text-gray-700 dark:text-gray-300">
-          <p>가장 많은 증발산량: {maxEvapotranspiration.time} - {maxEvapotranspiration.value.toFixed(2)} mm/h</p>
+          <p>가장 많은 증발산량: {maxEvapotranspiration.time} - {maxEvapotranspiration.value.toFixed(4)} mm/h</p>
         </div>
       </div>
     </div>
