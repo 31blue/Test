@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import Sidebar from '../partials/Sidebar';
 import Header from '../partials/Header';
-import FilterButton from '../components/DropdownFilter';
-import Datepicker from '../components/Datepicker';
+
 import CurrentTemperature from '../partials/home_now/CurrentTemperature';
 import CurrentHumidity from '../partials/home_now/CurrentHumidity';
+
 import Banner from '../partials/Banner';
 
 function Dashboard() {

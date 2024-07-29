@@ -8,6 +8,10 @@ import PlantSpecies from '../partials/home_plantprofile/PlantSpecies';
 import PlantPhysical from '../partials/home_plantprofile/PlantPhysical';
 import Banner from '../partials/Banner';
 
+
+axios.defaults.baseURL = 'http://192.168.0.21:8000';
+axios.defaults.withCredentials = true;
+
 function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [plantProfiles, setPlantProfiles] = useState([]);
@@ -19,7 +23,9 @@ function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://192.168.0.21:8000/');
+        const response = await axios.get('/', {
+          withCredentials: true
+        });
         setPlantProfiles(response.data);
         setActiveProfileId(response.data[0]?.id || null); // Set the first profile as active
         setIsLoading(false);
