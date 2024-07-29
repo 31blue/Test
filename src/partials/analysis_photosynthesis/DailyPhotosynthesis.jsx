@@ -8,7 +8,6 @@ function DailyPhotosynthesis({ plantData = [] }) {
 
   const formatData = (data) => {
     if (Array.isArray(data)) {
-      // 가장 앞에 있는 숫자 24개를 추출하고 순서를 뒤집음
       const extractedData = data.slice(0, 24).reverse();
       return extractedData.map(value => Number(value.toFixed(4)));
     }
@@ -17,7 +16,7 @@ function DailyPhotosynthesis({ plantData = [] }) {
 
   useEffect(() => {
     const formattedData = formatData(plantData);
-    const data = formattedData.map((value, index) => ({ time: `${23 - index}시`, value }));
+    const data = formattedData.map((value, index) => ({ time: `${23-index}시`, value }));
 
     const maxData = data.reduce((max, point) => point.value > max.value ? point : max, { time: '', value: 0 });
 
@@ -49,9 +48,8 @@ function DailyPhotosynthesis({ plantData = [] }) {
     const x = xScale(photosynthesisData.indexOf(point)) + margin.left;
     const y = yScale(point.value) + margin.top;
 
-    // 툴팁 위치를 대시보드 경계를 벗어나지 않도록 조정
-    const tooltipWidth = 100; // 예상 툴팁 너비
-    const tooltipHeight = 50; // 예상 툴팁 높이
+    const tooltipWidth = 100;
+    const tooltipHeight = 50;
     let adjustedX = x + margin.left + 10;
     let adjustedY = y + margin.top;
 
@@ -149,8 +147,8 @@ function DailyPhotosynthesis({ plantData = [] }) {
             style={{
               top: tooltip.y,
               left: tooltip.x,
-              backgroundColor: 'rgba(200, 255, 200, 0.8)', // 아주 연한 초록색 배경
-              border: '1px solid rgba(100, 200, 100, 0.8)', // 살짝 진한 초록색 테두리
+              backgroundColor: 'rgba(200, 255, 200, 0.8)',
+              border: '1px solid rgba(100, 200, 100, 0.8)',
             }}
           >
             <div>{tooltip.data.time}</div>

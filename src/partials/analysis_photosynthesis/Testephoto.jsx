@@ -5,21 +5,15 @@ function Testephoto({ plantData, isLoading, error }) {
   if (error) return <div>{error}</div>;
 
   const formatData = (data) => {
-    if (Array.isArray(data)) {
-      // 가장 앞에 있는 숫자 24개를 추출
-      const extractedData = data.slice(0, 24);
-      const formattedData = extractedData.map(value => Number(value.toFixed(4)));
-      
-      // 항상 7개의 값을 반환하도록 조정
-      const result = formattedData.slice(0, 7);
-      while (result.length < 7) {
-        result.push(0);
-      }
-      
-      // 배열을 뒤집어 최신 값이 첫 번째 요소가 되도록 함
-      return result.reverse();
-    }
-    return data;
+    if (!Array.isArray(data)) return data;
+
+    const formattedData = data
+      .slice(0, 7)
+      .map(value => Number(value.toFixed(4)));
+
+    const paddedData = [...formattedData, ...Array(7 - formattedData.length).fill(0)];
+    
+    return paddedData.reverse();
   };
 
   return (

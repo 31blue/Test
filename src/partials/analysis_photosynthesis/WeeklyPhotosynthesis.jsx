@@ -1,102 +1,176 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { tailwindConfig, hexToRGB } from '../../utils/Utils';
 
-const formatData = (data) => {
-  if (Array.isArray(data)) {
-    const extractedData = data.slice(0, 24);
-    const formattedData = extractedData.map(value => Number(value.toFixed(4)));
+function WeeklyPhotosynthesis({ plantData = [] }) {
+  const [photosynthesisData, setPhotosynthesisData] = useState([]);
+  const [maxPhotosynthesis, setMaxPhotosynthesis] = useState({ day: '', value: 0 });
+  const [tooltip, setTooltip] = useState({ visible: false, x: 0, y: 0, data: null });
 
-    const result = formattedData.slice(0, 7);
-    while (result.length < 7) {
-      result.push(0);
+  const formatData = (data) => {
+    if (!Array.isArray(data)) return data;
+
+    const formattedData = data
+      .slice(0, 7)  // 최근 7일 데이터 사용 (오늘 제외)
+      .map(value => Number(value.toFixed(4)));
+
+    const paddedData = [...formattedData, ...Array(7 - formattedData.length).fill(0)];
+    
+    return paddedData.reverse();
+  };
+
+  const getDates = () => {
+    const dates = [];
+    for (let i = 7; i > 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      dates.push(date.getDate());  // 날짜의 '일'만 저장
     }
+    return dates;
+  };
 
-    return result.reverse();
-  }
-  return data;
-};
+  useEffect(() => {
+    const formattedData = formatData(plantData);
+    const dates = getDates();
+    const data = formattedData.map((value, index) => ({
+      day: `${dates[index]}`,
+      value
+    }));
 
-const formatDayOnly = (index) => {
-  const today = new Date();
-  const date = new Date(today);
-  date.setDate(date.getDate() - (6 - index));
-  return `${date.getDate()}일`;
-};
+    const maxData = data.reduce((max, point) => point.value > max.value ? point : max, { day: '', value: 0 });
 
-const formatFullDate = (index) => {
-  const today = new Date();
-  const date = new Date(today);
-  date.setDate(date.getDate() - (6 - index));
-  return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
-};
+    setPhotosynthesisData(data);
+    setMaxPhotosynthesis(maxData);
+  }, [plantData]);
 
-const getDateRange = (data) => {
-  if (data.length === 0) return '';
+  const svgWidth = 800;
+  const svgHeight = 248;
+  const margin = { top: 20, right: 20, bottom: 30, left: 50 };
+  const width = svgWidth - margin.left - margin.right;
+  const height = svgHeight - margin.top - margin.bottom;
 
-  const today = new Date();
-  const startDate = new Date(today);
-  startDate.setDate(startDate.getDate() - 6);
-  const endDate = new Date(today);
-  endDate.setDate(endDate.getDate() - 1);
+  const xScale = (index) => (index / 6) * (width * 0.8) + width * 0.1;  // 80% of width, centered
+  const yScale = (value) => height - (value / 50) * height;
 
-  return `${formatFullDate(0)} ~ ${formatFullDate(6)}`;
-};
+  const barWidth = (width * 0.8) / 7 * 0.8;  // 80% of the available width for each bar
 
-const WeeklyPhotosynthesis = ({ plantData }) => {
-  const formattedData = formatData(plantData);
-  const maxPhotosynthesis = 30; // Setting the maximum value of the y-axis to 30
+  const handleMouseOver = (event, point) => {
+    const svgRect = event.target.ownerSVGElement.getBoundingClientRect();
+    const x = xScale(photosynthesisData.indexOf(point)) + margin.left;
+    const y = yScale(point.value) + margin.top;
+
+    const tooltipWidth = 100;
+    const tooltipHeight = 50;
+    let adjustedX = x - tooltipWidth / 2;
+    let adjustedY = y - tooltipHeight - 10;
+
+    // Ensure tooltip stays within the dashboard
+    if (adjustedX < margin.left) adjustedX = margin.left;
+    if (adjustedX + tooltipWidth > svgWidth - margin.right) adjustedX = svgWidth - margin.right - tooltipWidth;
+    if (adjustedY < margin.top) adjustedY = y + 10;
+
+    setTooltip({
+      visible: true,
+      x: adjustedX,
+      y: adjustedY,
+      data: point,
+    });
+  };
+
+  const handleMouseOut = () => {
+    setTooltip({
+      visible: false,
+      x: 0,
+      y: 0,
+      data: null,
+    });
+  };
+
+  const getDateRange = () => {
+    const today = new Date();
+    const sevenDaysAgo = new Date(today);
+    sevenDaysAgo.setDate(today.getDate() - 7);
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+    
+    const formatDate = (date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+
+    return `${formatDate(sevenDaysAgo)} ~ ${formatDate(yesterday)}`;
+  };
 
   return (
-    <div className="col-span-full xl:col-span-8 bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700">
+    <div className="relative col-span-full xl:col-span-8 bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700">
       <header className="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
         <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
-          일주일 광합성량
+          최근 7일간의 평균 광합성량입니다. ({getDateRange()})
         </h2>
-        <p className="mt-2 text-sm text-gray-500 italic text-right">
-          {getDateRange(formattedData)}
+        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+          최근 7일간의 평균 광합성량 변화를 확인해보세요!
         </p>
       </header>
       <div className="p-3">
-        <svg width="100%" height="300" viewBox="0 0 800 300">
-          <rect width="100%" height="100%" fill="white" />
-          {formattedData.map((value, index) => (
-            <rect
-              key={index}
-              x={(index * 100) + 50}
-              y={300 - (value / maxPhotosynthesis) * 250 - 30}
-              width="50"
-              height={(value / maxPhotosynthesis) * 250}
-              fill="#82ca9d"
-            />
-          ))}
-          {formattedData.map((_, index) => (
-            <text
-              key={index}
-              x={(index * 100) + 75}
-              y="290"
-              textAnchor="middle"
-              fill="black"
-            >
-              {formatDayOnly(index)}
-            </text>
-          ))}
-          <line x1="50" y1="270" x2="750" y2="270" stroke="black" />
-          <line x1="50" y1="20" x2="50" y2="270" stroke="black" />
-          {Array.from({ length: 6 }).map((_, i) => (
-            <text
-              key={i}
-              x="40"
-              y={270 - (i * 50)}
-              textAnchor="end"
-              alignmentBaseline="middle"
-              fill="black"
-            >
-              {(i * 5).toFixed(0)}
-            </text>
-          ))}
+        <svg width="100%" height={svgHeight} viewBox={`0 0 ${svgWidth} ${svgHeight}`} preserveAspectRatio="xMidYMid meet">
+          <g transform={`translate(${margin.left}, ${margin.top})`}>
+            {photosynthesisData.map((point, index) => (
+              <rect
+                key={index}
+                x={xScale(index) - barWidth / 2}
+                y={yScale(point.value)}
+                width={barWidth}
+                height={height - yScale(point.value)}
+                fill={`rgba(${hexToRGB(tailwindConfig().theme.colors.green[500])}, 0.2)`}
+                stroke={tailwindConfig().theme.colors.green[500]}
+                strokeWidth="1"
+                onMouseOver={(event) => handleMouseOver(event, point)}
+                onMouseOut={handleMouseOut}
+              />
+            ))}
+            <g className="axis-y" transform={`translate(0, 0)`}>
+              {[0, 10, 20, 30, 40, 50].map((tick) => (
+                <g key={tick} transform={`translate(0, ${yScale(tick)})`}>
+                  <line x2={width} stroke="currentColor" strokeDasharray="2,2" />
+                  <text x="-9" dy="0.32em" textAnchor="end" fill="currentColor" fontSize="10">
+                    {tick}
+                  </text>
+                </g>
+              ))}
+            </g>
+            <g className="axis-x" transform={`translate(0, ${height})`}>
+              {photosynthesisData.map((point, index) => (
+                <g key={index} transform={`translate(${xScale(index)}, 0)`}>
+                  <line y2="6" stroke="currentColor" />
+                  <text y="9" dy="0.71em" textAnchor="middle" fill="currentColor" fontSize="10">
+                    {point.day}
+                  </text>
+                </g>
+              ))}
+            </g>
+          </g>
         </svg>
+        {tooltip.visible && (
+          <div
+            className="absolute text-xs p-2 rounded shadow-lg"
+            style={{
+              top: tooltip.y,
+              left: tooltip.x,
+              backgroundColor: 'rgba(200, 255, 200, 0.8)',
+              border: '1px solid rgba(100, 200, 100, 0.8)',
+            }}
+          >
+            <div>{tooltip.data.day}일</div>
+            <div>{tooltip.data.value.toFixed(2)} μmol m⁻² s⁻¹</div>
+          </div>
+        )}
+        <div className="text-center mt-4 text-sm text-gray-700 dark:text-gray-300">
+          <p>가장 높은 평균 광합성량: {maxPhotosynthesis.day}일 - {maxPhotosynthesis.value.toFixed(2)} μmol m⁻² s⁻¹</p>
+        </div>
       </div>
     </div>
   );
-};
+}
 
 export default WeeklyPhotosynthesis;
