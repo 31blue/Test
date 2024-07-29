@@ -3,7 +3,7 @@ import axios from 'axios';
 import Sidebar from '../partials/Sidebar';
 import Header from '../partials/Header';
 import SummaryGraph from '../partials/analysis_summary/SummaryGraph';
-
+import SummaryGraph2 from '../partials/analysis_summary/SummaryGraph2';
 import Banner from '../partials/Banner';
 
 axios.defaults.baseURL = 'http://192.168.0.21:8000';
@@ -11,7 +11,8 @@ axios.defaults.withCredentials = true;
 
 function Analysis_Photosynthesis() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [plantData, setPlantData] = useState(null); 
+  const [plantData, setPlantData] = useState(null);
+  const [evapoData, setEvapoData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -24,20 +25,24 @@ function Analysis_Photosynthesis() {
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const { data } = await axios.get('/photo/3');
-        setPlantData(data);
+        const [photoResponse, evapoResponse] = await Promise.all([
+          axios.get('/photo/3'),
+          axios.get('/evapo/1'),
+        ]);
+        setPlantData(photoResponse.data);
+        setEvapoData(evapoResponse.data);
         setError(null);
       } catch (error) {
-        setError("데이터 가져오기 실패");
-        console.error("Error:", error);
+        setError('데이터 가져오기 실패');
+        console.error('Error:', error);
       } finally {
         setIsLoading(false);
       }
@@ -58,27 +63,26 @@ function Analysis_Photosynthesis() {
               <div className="mb-4 sm:mb-0 flex items-center">
                 <h1 className="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold flex items-center">
                   광합성량 분석
-                  <svg 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    width="16" 
-                    height="16" 
-                    viewBox="0 0 16 16" 
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
                     className="shrink-0 fill-current text-gray-400 ml-2 mb-1 cursor-pointer"
                     style={{ width: '0.8em', height: '0.8em' }}
                     onClick={toggleModal}
                   >
-                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
                   </svg>
                 </h1>
               </div>
             </div>
             <div className="grid grid-cols-12 gap-6">
-              {/* Ensure components only render if plantData is available */}
               {plantData && (
                 <>
                   <SummaryGraph plantData={plantData.day_avg_photo} />
-
+                  <SummaryGraph2 evapoData={evapoData.day_avg_evapo} />
                 </>
               )}
             </div>
@@ -111,7 +115,7 @@ function Analysis_Photosynthesis() {
             <p className="mb-4">
               이 정보들을 통해 식물의 광합성 활동을 종합적으로 분석하고, 식물의 건강 상태와 생장 환경의 적합성을 평가할 수 있습니다.
             </p>
-            <button 
+            <button
               onClick={toggleModal}
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             >
