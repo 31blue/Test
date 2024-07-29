@@ -1,42 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { tailwindConfig, hexToRGB } from '../../utils/Utils';
 
-function DailyPhotosynthesis() {
+function DailyPhotosynthesis({ plantData = [] }) {
   const [photosynthesisData, setPhotosynthesisData] = useState([]);
   const [maxPhotosynthesis, setMaxPhotosynthesis] = useState({ time: '', value: 0 });
   const [tooltip, setTooltip] = useState({ visible: false, x: 0, y: 0, data: null });
 
-  // Get yesterday's date in YYYY-MM-DD format
-  const getYesterdayDate = () => {
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(today.getDate() - 1);
-    const year = yesterday.getFullYear();
-    const month = String(yesterday.getMonth() + 1).padStart(2, '0');
-    const day = String(yesterday.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
+  const formatData = (data) => {
+    if (Array.isArray(data)) {
+      // 가장 앞에 있는 숫자 24개를 추출하고 순서를 뒤집음
+      const extractedData = data.slice(0, 24).reverse();
+      return extractedData.map(value => Number(value.toFixed(4)));
+    }
+    return data;
   };
 
   useEffect(() => {
-    const generateData = () => {
-      const data = [];
-      let maxData = { time: '', value: 0 };
+    const formattedData = formatData(plantData);
+    const data = formattedData.map((value, index) => ({ time: `${23 - index}시`, value }));
 
-      for (let i = 0; i < 24; i++) {
-        const value = Math.random() * 100; // 광합성량 단위는 μmol m⁻² s⁻¹
-        data.push({ time: `${i}시`, value });
+    const maxData = data.reduce((max, point) => point.value > max.value ? point : max, { time: '', value: 0 });
 
-        if (value > maxData.value) {
-          maxData = { time: `${i}시`, value };
-        }
-      }
-
-      setPhotosynthesisData(data);
-      setMaxPhotosynthesis(maxData);
-    };
-
-    generateData();
-  }, []);
+    setPhotosynthesisData(data);
+    setMaxPhotosynthesis(maxData);
+  }, [plantData]);
 
   const svgWidth = 800;
   const svgHeight = 248;
@@ -61,10 +48,24 @@ function DailyPhotosynthesis() {
     const svgRect = event.target.ownerSVGElement.getBoundingClientRect();
     const x = xScale(photosynthesisData.indexOf(point)) + margin.left;
     const y = yScale(point.value) + margin.top;
+
+    // 툴팁 위치를 대시보드 경계를 벗어나지 않도록 조정
+    const tooltipWidth = 100; // 예상 툴팁 너비
+    const tooltipHeight = 50; // 예상 툴팁 높이
+    let adjustedX = x + margin.left + 10;
+    let adjustedY = y + margin.top;
+
+    if (adjustedX + tooltipWidth > svgRect.width) {
+      adjustedX = x - tooltipWidth - 10;
+    }
+    if (adjustedY + tooltipHeight > svgRect.height) {
+      adjustedY = y - tooltipHeight - 10;
+    }
+
     setTooltip({
       visible: true,
-      x,
-      y,
+      x: adjustedX,
+      y: adjustedY,
       data: point,
     });
   };
@@ -76,6 +77,16 @@ function DailyPhotosynthesis() {
       y: 0,
       data: null,
     });
+  };
+
+  const getYesterdayDate = () => {
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+    const year = yesterday.getFullYear();
+    const month = String(yesterday.getMonth() + 1).padStart(2, '0');
+    const day = String(yesterday.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   };
 
   return (
@@ -137,7 +148,7 @@ function DailyPhotosynthesis() {
             className="absolute text-xs p-2 rounded shadow-lg"
             style={{
               top: tooltip.y,
-              left: tooltip.x + margin.left + 10,
+              left: tooltip.x,
               backgroundColor: 'rgba(200, 255, 200, 0.8)', // 아주 연한 초록색 배경
               border: '1px solid rgba(100, 200, 100, 0.8)', // 살짝 진한 초록색 테두리
             }}

@@ -85,8 +85,8 @@ function Analysis_Photosynthesis() {
               </div>
             </div>
             <div className="grid grid-cols-12 gap-6">
-              <Testephoto plantData={plantData.day_avg_photo} isLoading={isLoading} error={error} />
-              <DailyPhotosynthesis plantData={plantData.hour_avg_photo}/>
+              <Testephoto plantData={plantData.hour_avg_photo} isLoading={isLoading} error={error} />
+              <DailyPhotosynthesis plantData={plantData.hour_avg_photo} />
               <TotalPhotosynthesis />
               <WeeklyPhotosynthesis />
               <DailyOxygen />
