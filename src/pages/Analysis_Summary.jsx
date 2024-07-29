@@ -4,6 +4,7 @@ import Sidebar from '../partials/Sidebar';
 import Header from '../partials/Header';
 import SummaryGraph from '../partials/analysis_summary/SummaryGraph';
 import SummaryGraph2 from '../partials/analysis_summary/SummaryGraph2';
+import CombinedSummaryGraph from '../partials/analysis_summary/CombinedSummaryGraph';
 import Banner from '../partials/Banner';
 
 axios.defaults.baseURL = 'http://192.168.0.21:8000';
@@ -79,7 +80,7 @@ function Analysis_Photosynthesis() {
               </div>
             </div>
             <div className="grid grid-cols-12 gap-6">
-              {plantData && (
+              {plantData && evapoData && (
                 <>
                   <SummaryGraph plantData={plantData.day_avg_photo} />
                   <SummaryGraph2 evapoData={evapoData.day_avg_evapo} />
