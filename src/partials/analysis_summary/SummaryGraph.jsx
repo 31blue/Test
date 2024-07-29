@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { tailwindConfig, hexToRGB } from '../../utils/Utils';
 
-function WeeklyPatterns({ plantData = [] }) {
+function SummaryGraph({ plantData = [] }) {
   const [photosynthesisData, setPhotosynthesisData] = useState([]);
   const [maxPhotosynthesis, setMaxPhotosynthesis] = useState({ day: '', value: 0 });
   const [tooltip, setTooltip] = useState({ visible: false, x: 0, y: 0, data: null });
@@ -11,7 +11,7 @@ function WeeklyPatterns({ plantData = [] }) {
 
     const formattedData = data
       .slice(0, 7)  // 최근 7일 데이터 사용 (오늘 제외)
-      .map(value => Math.max(0, Number(value.toFixed(4))));  // 음수값을 0으로 처리
+      .map(value => Number(value.toFixed(4)));
 
     const paddedData = [...formattedData, ...Array(7 - formattedData.length).fill(0)];
     
@@ -49,10 +49,7 @@ function WeeklyPatterns({ plantData = [] }) {
   const height = svgHeight - margin.top - margin.bottom;
 
   const xScale = (index) => (index / 6) * (width * 0.8) + width * 0.1;  // 80% of width, centered
-  const yScale = (value) => {
-    const maxValue = Math.max(...photosynthesisData.map(d => d.value), 50);
-    return height - (value / maxValue) * height;
-  };
+  const yScale = (value) => height - (value / 50) * height;
 
   const barWidth = (width * 0.8) / 7 * 0.8;  // 80% of the available width for each bar
 
@@ -176,4 +173,4 @@ function WeeklyPatterns({ plantData = [] }) {
   );
 }
 
-export default WeeklyPatterns;
+export default SummaryGraph;

@@ -13,7 +13,7 @@ axios.defaults.withCredentials = true;
 
 function Analysis_Photosynthesis() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [plantData, setPlantData] = useState(null); // Changed to null for better null-checks
+  const [plantData, setPlantData] = useState(null); 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
