@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import Sidebar from '../partials/Sidebar';
 import Header from '../partials/Header';
 
-
+import Testephoto from '../partials/analysis_photosynthesis/Testephoto';
 import DailyPhotosynthesis from '../partials/analysis_photosynthesis/DailyPhotosynthesis';
 import TotalPhotosynthesis from '../partials/analysis_photosynthesis/TotalPhotosynthesis';
 import WeeklyPhotosynthesis from '../partials/analysis_photosynthesis/WeeklyPhotosynthesis';
@@ -61,6 +61,7 @@ function Analysis_Photosynthesis() {
               </div>
             </div>
             <div className="grid grid-cols-12 gap-6">
+              <Testephoto />
               <DailyPhotosynthesis />
               <TotalPhotosynthesis />
               <WeeklyPhotosynthesis />

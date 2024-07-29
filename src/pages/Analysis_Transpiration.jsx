@@ -55,7 +55,7 @@ function Analysis_Evapotranspiration() {
               <DailyEvapotranspiration hour_avg_evapo={plantData.hour_avg_evapo} />
               <TotalEvapotranspiration />
               <WeeklyEvapotranspiration />
-              <DailyWaterIntake waterAmount={waterIntakeAmount} />
+              <DailyWaterIntake  />
             </div>
           </div>
         </main>

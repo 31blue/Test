@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Testevapo({ plantData, isLoading, error }) {
+function Testephoto({ plantData, isLoading, error }) {
   if (isLoading) return <div>로딩 중...</div>;
   if (error) return <div>{error}</div>;
 
@@ -18,4 +18,4 @@ function Testevapo({ plantData, isLoading, error }) {
   );
 }
 
-export default Testevapo;
+export default Testephoto;
