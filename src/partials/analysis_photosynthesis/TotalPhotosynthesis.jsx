@@ -20,10 +20,15 @@ const getWeekRange = () => {
   };
 };
 
-function TotalPhotosynthesis() {
-  // 실제 데이터로 대체해야 합니다
-  const totalPhotosynthesis = 7000; // 일주일 동안의 총 광합성량 (가상 데이터)
-  const totalOxygen = 3500; // 일주일 동안의 총 산소량 (가상 데이터)
+function TotalPhotosynthesis({ day_avg_photo, week_avg_O2 }) {
+  // 평균 일일 광합성량 계산
+  const avgDailyPhotosynthesis = day_avg_photo.reduce((sum, value) => sum + value, 0) / day_avg_photo.length;
+  
+  // 주간 총 광합성량 계산 (μmol m⁻² s⁻¹)
+  const totalPhotosynthesis = avgDailyPhotosynthesis * 7;
+  
+  // 주간 총 산소 생성량 계산 (L)
+  const totalOxygen = week_avg_O2 * 7;
 
   const { start, end } = getWeekRange();
 
@@ -38,7 +43,7 @@ function TotalPhotosynthesis() {
         </p>
         <div className="flex items-start mt-4">
           <div className="text-3xl font-bold text-gray-800 dark:text-gray-100 mr-2">
-            {totalPhotosynthesis}
+            {totalPhotosynthesis.toFixed(2)}
           </div>
           <div className="text-sm font-semibold text-gray-400 dark:text-gray-500">
             총 광합성량 (μmol m⁻² s⁻¹)
@@ -48,10 +53,10 @@ function TotalPhotosynthesis() {
       <div className="px-5 pt-3 pb-5">
         <div className="flex items-start">
           <div className="text-3xl font-bold text-gray-800 dark:text-gray-100 mr-2">
-            {totalOxygen}
+            {totalOxygen.toFixed(2)}
           </div>
           <div className="text-sm font-semibold text-gray-400 dark:text-gray-500">
-            총 산소량 (g)
+            총 산소량 (L)
           </div>
         </div>
       </div>

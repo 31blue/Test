@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import Sidebar from '../partials/Sidebar';
 import Header from '../partials/Header';
-import Testephoto from '../partials/analysis_photosynthesis/Testephoto';
 import DailyPhotosynthesis from '../partials/analysis_photosynthesis/DailyPhotosynthesis';
 import TotalPhotosynthesis from '../partials/analysis_photosynthesis/TotalPhotosynthesis';
 import WeeklyPhotosynthesis from '../partials/analysis_photosynthesis/WeeklyPhotosynthesis';
@@ -14,7 +13,7 @@ axios.defaults.withCredentials = true;
 
 function Analysis_Photosynthesis() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [plantData, setPlantData] = useState({});
+  const [plantData, setPlantData] = useState(null); // Changed to null for better null-checks
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -77,11 +76,21 @@ function Analysis_Photosynthesis() {
               </div>
             </div>
             <div className="grid grid-cols-12 gap-6">
-              <Testephoto plantData={plantData.day_avg_photo} isLoading={isLoading} error={error} />
-              <DailyPhotosynthesis plantData={plantData.hour_avg_photo} />
-              <TotalPhotosynthesis />
-              <WeeklyPhotosynthesis plantData={plantData.day_avg_photo} />
-              <DailyOxygen />
+              {/* Ensure components only render if plantData is available */}
+              {plantData && (
+                <>
+                  <DailyPhotosynthesis plantData={plantData.hour_avg_photo} />
+                  <WeeklyPhotosynthesis plantData={plantData.day_avg_photo} />
+                  <TotalPhotosynthesis 
+                    day_avg_photo={plantData.day_avg_photo} 
+                    week_avg_O2={plantData.week_avg_O2}
+                  />
+                  <DailyOxygen 
+                    day_avg_photo={plantData.day_avg_photo} 
+                    week_avg_O2={plantData.week_avg_O2}
+                  />
+                </>
+              )}
             </div>
           </div>
         </main>
