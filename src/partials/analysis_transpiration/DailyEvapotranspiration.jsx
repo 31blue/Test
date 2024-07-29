@@ -1,50 +1,29 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { tailwindConfig, hexToRGB } from '../../utils/Utils';
-import axios from 'axios';
 
-function DailyEvapotranspiration() {
+function DailyEvapotranspiration({ plantData = [] }) {
   const [evapotranspirationData, setEvapotranspirationData] = useState([]);
   const [maxEvapotranspiration, setMaxEvapotranspiration] = useState({ time: '', value: 0 });
   const [tooltip, setTooltip] = useState({ visible: false, x: 0, y: 0, data: null });
   const dashboardRef = useRef(null);
 
-  const getYesterdayDate = () => {
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(today.getDate() - 1);
-    const year = yesterday.getFullYear();
-    const month = String(yesterday.getMonth() + 1).padStart(2, '0');
-    const day = String(yesterday.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
+  const formatData = (data) => {
+    if (Array.isArray(data)) {
+      const extractedData = data.slice(0, 24).reverse();
+      return extractedData.map(value => Number(value.toFixed(4)));
+    }
+    return data;
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('/evapo/1', {
-          withCredentials: true
-        });
-        const newData = response.data.hour_avg_evapo.slice(-24).map(value => {
-          return +(Math.round((value + 10) * 10000) / 10000).toFixed(4);
-        });
+    const formattedData = formatData(plantData);
+    const data = formattedData.map((value, index) => ({ time: `${23 - index}시`, value }));
 
-        const processedData = newData.map((value, index) => ({
-          time: `${index}시`,
-          value: value
-        }));
+    const maxData = data.reduce((max, point) => point.value > max.value ? point : max, { time: '', value: 0 });
 
-        setEvapotranspirationData(processedData);
-
-        const maxData = processedData.reduce((max, item) => 
-          item.value > max.value ? item : max, { time: '', value: 0 });
-        setMaxEvapotranspiration(maxData);
-
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-  }, []);
+    setEvapotranspirationData(data);
+    setMaxEvapotranspiration(maxData);
+  }, [plantData]);
 
   const svgWidth = 800;
   const svgHeight = 248;
@@ -53,7 +32,7 @@ function DailyEvapotranspiration() {
   const height = svgHeight - margin.top - margin.bottom;
 
   const xScale = (index) => (index / 23) * width;
-  const yScale = (value) => height - (value / 15) * height;
+  const yScale = (value) => height - ((value + 10) / 20) * height;
 
   const line = evapotranspirationData
     .map((point, index) =>
@@ -93,6 +72,16 @@ function DailyEvapotranspiration() {
     setTooltip({ visible: false, x: 0, y: 0, data: null });
   };
 
+  const getYesterdayDate = () => {
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+    const year = yesterday.getFullYear();
+    const month = String(yesterday.getMonth() + 1).padStart(2, '0');
+    const day = String(yesterday.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   return (
     <div ref={dashboardRef} className="relative col-span-full xl:col-span-8 bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700">
       <header className="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
@@ -126,7 +115,7 @@ function DailyEvapotranspiration() {
               />
             ))}
             <g className="axis-y" transform={`translate(0, 0)`}>
-              {[0, 3, 6, 9, 12, 15].map((tick) => (
+              {[-10, -5, 0, 5, 10].map((tick) => (
                 <g key={tick} transform={`translate(0, ${yScale(tick)})`}>
                   <line x2={width} stroke="currentColor" strokeDasharray="2,2" />
                   <text x="-9" dy="0.32em" textAnchor="end" fill="currentColor" fontSize="10">
