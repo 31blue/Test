@@ -5,7 +5,7 @@ import Header from '../partials/Header';
 import FilterButton from '../components/DropdownFilter';
 import Datepicker from '../components/Datepicker';
 
-import DashboardCard12 from '../partials/message/DashboardCard12';
+import MessageSend from '../partials/message/MessageSend';
 
 import Banner from '../partials/Banner';
 
@@ -13,6 +13,7 @@ function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [filteredDate, setFilteredDate] = useState(null);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   const handleDateChange = (dates) => {
     if (dates.length > 0) {
@@ -24,6 +25,10 @@ function Dashboard() {
     if (selectedDate && selectedDate.length === 2) {
       setFilteredDate(selectedDate);
     }
+  };
+
+  const toggleTooltip = () => {
+    setShowTooltip(!showTooltip);
   };
 
   return (
@@ -44,25 +49,28 @@ function Dashboard() {
 
               {/* Left: Title */}
               <div className="mb-4 sm:mb-0">
-                <h1 className="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">메세지</h1>
-              </div>
-
-              {/* Right: Actions */}
-              <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-                {/* Filter button */}
-                <FilterButton align="right" />
-                {/* Datepicker built with flatpickr */}
-                <Datepicker align="right" onChange={handleDateChange} />
-                {/* Add view button */}
-                <button 
-                  className="btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white"
-                  onClick={handleAddView}
-                >
-                  <svg className="fill-current shrink-0 xs:hidden" width="16" height="16" viewBox="0 0 16 16">
-                    <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
-                  </svg>
-                  <span className="max-xs:sr-only">Add View</span>
-                </button>                
+                <h1 className="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold flex items-center">
+                  메세지
+                  <div className="relative">
+                    <svg 
+                      xmlns="http://www.w3.org/2000/svg" 
+                      width="16" 
+                      height="16" 
+                      viewBox="0 0 16 16" 
+                      className="shrink-0 fill-current text-gray-400 ml-2 mb-1 cursor-pointer"
+                      style={{ width: '0.8em', height: '0.8em' }}
+                      onClick={toggleTooltip}
+                    >
+                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                      <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                    </svg>
+                    {showTooltip && (
+                      <div className="absolute left-0 top-full mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg p-4 text-sm text-gray-600 z-10 text-justify">
+                        이곳에서 그동안 받은 알림들의 로그를 날짜별로 확인할 수 있습니다. 각 날짜에 해당하는 알림 내용이 저장되어 있어 과거의 알림 기록을 쉽게 찾아볼 수 있습니다.
+                      </div>
+                    )}
+                  </div>
+                </h1>
               </div>
 
             </div>
@@ -70,7 +78,7 @@ function Dashboard() {
             {/* Cards */}
             <div className="grid grid-cols-12 gap-6">
               {/* Card (Recent Activity) */}
-              <DashboardCard12 filteredDate={filteredDate} />
+              <MessageSend filteredDate={filteredDate} />
             </div>
 
           </div>

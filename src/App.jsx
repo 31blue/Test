@@ -20,6 +20,7 @@ import Calendar from './pages/Calendar';
 import Album from './pages/Album';
 import Settings_User from './pages/Settings_User';
 import Settings_Notification from './pages/Settings_Notification';
+import PageTest from './pages/PageTest'; // 새로 추가된 import
 
 function App() {
 
@@ -36,6 +37,7 @@ function App() {
       <Routes>
         <Route exact path="/" element={<Home_PlantProfile />} />
         <Route path="/messages" element={<Messages />} />
+        
         <Route path="/home_plantprofile" element={<Home_PlantProfile />} />
         <Route path="/home_now" element={<Home_Now />} />
         <Route path="/analysis_summary" element={<Analysis_Summary />} />
@@ -45,6 +47,7 @@ function App() {
         <Route path="/album" element={<Album />} />
         <Route path="/settings_user" element={<Settings_User />} />
         <Route path="/settings_notification" element={<Settings_Notification />} />
+        <Route path="/pagetest" element={<PageTest />} /> {/* 새로 추가된 Route */}
       </Routes>
     </>
   );

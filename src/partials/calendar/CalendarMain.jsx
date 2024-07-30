@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 function CalendarMain({ currentDate, wateredDates, floweringDates, onWatering, onFlowering }) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [displayDate, setDisplayDate] = useState(new Date(currentDate.getFullYear(), currentDate.getMonth(), 1));
+  const calendarRef = useRef(null);
 
   const year = displayDate.getFullYear();
   const month = displayDate.getMonth();
@@ -45,8 +46,51 @@ function CalendarMain({ currentDate, wateredDates, floweringDates, onWatering, o
   const isFlowering = selectedDate && floweringDates.includes(selectedDate.toDateString());
 
   const changeMonth = (increment) => {
-    setDisplayDate(new Date(year, month + increment, 1));
+    setDisplayDate(prevDate => {
+      const newDate = new Date(prevDate);
+      newDate.setMonth(newDate.getMonth() + increment);
+      return newDate;
+    });
   };
+
+  // 슬라이드 기능
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  const handleTouchStart = (e) => {
+    touchStartX = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchEnd = (e) => {
+    touchEndX = e.changedTouches[0].clientX;
+    handleSwipe();
+  };
+
+  const handleSwipe = () => {
+    const swipeThreshold = 50; // 슬라이드로 인식할 최소 거리
+    if (touchStartX - touchEndX > swipeThreshold) {
+      // 왼쪽으로 슬라이드
+      changeMonth(1);
+    } else if (touchEndX - touchStartX > swipeThreshold) {
+      // 오른쪽으로 슬라이드
+      changeMonth(-1);
+    }
+  };
+
+  useEffect(() => {
+    const calendar = calendarRef.current;
+    if (calendar) {
+      calendar.addEventListener('touchstart', handleTouchStart, false);
+      calendar.addEventListener('touchend', handleTouchEnd, false);
+    }
+
+    return () => {
+      if (calendar) {
+        calendar.removeEventListener('touchstart', handleTouchStart);
+        calendar.removeEventListener('touchend', handleTouchEnd);
+      }
+    };
+  }, []);
 
   return (
     <div className="col-span-full xl:col-span-8 bg-white dark:bg-gray-800 shadow-sm rounded-xl">
@@ -75,7 +119,7 @@ function CalendarMain({ currentDate, wateredDates, floweringDates, onWatering, o
           </button>
         </div>
       </header>
-      <div className="p-3">
+      <div className="p-3" ref={calendarRef}>
         <div className="grid grid-cols-7 gap-2 mb-2">
           {weekdays.map(day => (
             <div key={day} className="text-center font-semibold">

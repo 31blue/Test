@@ -1,101 +1,177 @@
-import React from 'react';
-import { chartAreaGradient } from '../../charts/ChartjsConfig';
-import LineChart from '../../charts/LineChart02';
+import React, { useState, useEffect } from 'react';
+import { tailwindConfig, hexToRGB } from '../../utils/Utils';
 
-// Import utilities
-import { tailwindConfig } from '../../utils/Utils';
+function WeeklyPatterns({ plantData = [] }) {
+  const [photosynthesisData, setPhotosynthesisData] = useState([]);
+  const [maxPhotosynthesis, setMaxPhotosynthesis] = useState({ day: '', value: 0 });
+  const [tooltip, setTooltip] = useState({ visible: false, x: 0, y: 0, data: null });
 
-function WeeklyPatterns() {
+  const formatData = (data) => {
+    if (!Array.isArray(data)) return data;
 
-  const chartData = {
-    labels: [
-      '12-01-2022',
-      '01-01-2023',
-      '02-01-2023',
-      '03-01-2023',
-      '04-01-2023',
-      '05-01-2023',
-      '06-01-2023',
-      '07-01-2023',
-      '08-01-2023',
-      '09-01-2023',
-      '10-01-2023',
-      '11-01-2023',
-      '12-01-2023',
-      '01-01-2024',
-      '02-01-2024',
-      '03-01-2024',
-      '04-01-2024',
-      '05-01-2024',
-      '06-01-2024',
-      '07-01-2024',
-      '08-01-2024',
-      '09-01-2024',
-      '10-01-2024',
-      '11-01-2024',
-      '12-01-2024',
-      '01-01-2025',
-    ],
-    datasets: [
-      // Indigo line
-      {
-        label: 'Current',
-        data: [73, 64, 73, 69, 104, 104, 164, 164, 120, 120, 120, 148, 142, 104, 122, 110, 104, 152, 166, 233, 268, 252, 284, 284, 333, 323],
-        borderColor: tailwindConfig().theme.colors.violet[500],
-        fill: false,
-        borderWidth: 2,
-        pointRadius: 0,
-        pointHoverRadius: 3,
-        pointBackgroundColor: tailwindConfig().theme.colors.violet[500],
-        pointHoverBackgroundColor: tailwindConfig().theme.colors.violet[500],
-        pointBorderWidth: 0,
-        pointHoverBorderWidth: 0,
-        clip: 20,
-        tension: 0.2,
-      },
-      // Blue line
-      {
-        label: 'Previous',
-        data: [184, 86, 42, 378, 42, 243, 38, 120, 0, 0, 42, 0, 84, 0, 276, 0, 124, 42, 124, 88, 88, 215, 156, 88, 124, 64],
-        borderColor: tailwindConfig().theme.colors.sky[500],
-        fill: false,
-        borderWidth: 2,
-        pointRadius: 0,
-        pointHoverRadius: 3,
-        pointBackgroundColor: tailwindConfig().theme.colors.sky[500],
-        pointHoverBackgroundColor: tailwindConfig().theme.colors.sky[500],
-        pointBorderWidth: 0,
-        pointHoverBorderWidth: 0,
-        clip: 20,
-        tension: 0.2,
-      },
-      // green line
-      {
-        label: 'Average',
-        data: [122, 170, 192, 86, 102, 124, 115, 115, 56, 104, 0, 72, 208, 186, 223, 188, 114, 162, 200, 150, 118, 118, 76, 122, 230, 268],
-        borderColor: tailwindConfig().theme.colors.green[500],
-        fill: false,
-        borderWidth: 2,
-        pointRadius: 0,
-        pointHoverRadius: 3,
-        pointBackgroundColor: tailwindConfig().theme.colors.green[500],
-        pointHoverBackgroundColor: tailwindConfig().theme.colors.green[500],
-        pointBorderWidth: 0,
-        pointHoverBorderWidth: 0,
-        clip: 20,
-        tension: 0.2,
-      },
-    ],
+    const formattedData = data
+      .slice(0, 7)  // 최근 7일 데이터 사용 (오늘 제외)
+      .map(value => Math.max(0, Number(value.toFixed(4))));  // 음수값을 0으로 처리
+
+    const paddedData = [...formattedData, ...Array(7 - formattedData.length).fill(0)];
+    
+    return paddedData.reverse();
+  };
+
+  const getDates = () => {
+    const dates = [];
+    for (let i = 7; i > 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      dates.push(date.getDate());  // 날짜의 '일'만 저장
+    }
+    return dates;
+  };
+
+  useEffect(() => {
+    const formattedData = formatData(plantData);
+    const dates = getDates();
+    const data = formattedData.map((value, index) => ({
+      day: `${dates[index]}`,
+      value
+    }));
+
+    const maxData = data.reduce((max, point) => point.value > max.value ? point : max, { day: '', value: 0 });
+
+    setPhotosynthesisData(data);
+    setMaxPhotosynthesis(maxData);
+  }, [plantData]);
+
+  const svgWidth = 800;
+  const svgHeight = 248;
+  const margin = { top: 20, right: 20, bottom: 30, left: 50 };
+  const width = svgWidth - margin.left - margin.right;
+  const height = svgHeight - margin.top - margin.bottom;
+
+  const xScale = (index) => (index / 6) * (width * 0.8) + width * 0.1;  // 80% of width, centered
+  const yScale = (value) => {
+    const maxValue = Math.max(...photosynthesisData.map(d => d.value), 50);
+    return height - (value / maxValue) * height;
+  };
+
+  const barWidth = (width * 0.8) / 7 * 0.8;  // 80% of the available width for each bar
+
+  const handleMouseOver = (event, point) => {
+    const svgRect = event.target.ownerSVGElement.getBoundingClientRect();
+    const x = xScale(photosynthesisData.indexOf(point)) + margin.left;
+    const y = yScale(point.value) + margin.top;
+
+    const tooltipWidth = 100;
+    const tooltipHeight = 50;
+    let adjustedX = x - tooltipWidth / 2;
+    let adjustedY = y - tooltipHeight - 10;
+
+    // Ensure tooltip stays within the dashboard
+    if (adjustedX < margin.left) adjustedX = margin.left;
+    if (adjustedX + tooltipWidth > svgWidth - margin.right) adjustedX = svgWidth - margin.right - tooltipWidth;
+    if (adjustedY < margin.top) adjustedY = y + 10;
+
+    setTooltip({
+      visible: true,
+      x: adjustedX,
+      y: adjustedY,
+      data: point,
+    });
+  };
+
+  const handleMouseOut = () => {
+    setTooltip({
+      visible: false,
+      x: 0,
+      y: 0,
+      data: null,
+    });
+  };
+
+  const getDateRange = () => {
+    const today = new Date();
+    const sevenDaysAgo = new Date(today);
+    sevenDaysAgo.setDate(today.getDate() - 7);
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+    
+    const formatDate = (date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+
+    return `${formatDate(sevenDaysAgo)} ~ ${formatDate(yesterday)}`;
   };
 
   return (
-    <div className="flex flex-col col-span-full sm:col-span-6 bg-white dark:bg-gray-800 shadow-sm rounded-xl">
-      <header className="px-5 py-4 border-b border-gray-100 dark:border-gray-700/60 flex items-center">
-        <h2 className="font-semibold text-gray-800 dark:text-gray-100">광합성량과 증발산량 추이 (일주일)</h2>
+    <div className="relative col-span-full xl:col-span-8 bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700">
+      <header className="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
+        <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
+          최근 7일간의 평균 광합성량입니다. ({getDateRange()})
+        </h2>
+        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+          최근 7일간의 평균 광합성량 변화를 확인해보세요!
+        </p>
       </header>
-      {/* Chart built with Chart.js 3 */}
-      {/* Change the height attribute to adjust the chart height */}
-      <LineChart data={chartData} width={595} height={248} />
+      <div className="p-3">
+        <svg width="100%" height={svgHeight} viewBox={`0 0 ${svgWidth} ${svgHeight}`} preserveAspectRatio="xMidYMid meet">
+          <g transform={`translate(${margin.left}, ${margin.top})`}>
+            {photosynthesisData.map((point, index) => (
+              <rect
+                key={index}
+                x={xScale(index) - barWidth / 2}
+                y={yScale(point.value)}
+                width={barWidth}
+                height={height - yScale(point.value)}
+                fill={`rgba(${hexToRGB(tailwindConfig().theme.colors.green[500])}, 0.2)`}
+                stroke={tailwindConfig().theme.colors.green[500]}
+                strokeWidth="1"
+                onMouseOver={(event) => handleMouseOver(event, point)}
+                onMouseOut={handleMouseOut}
+              />
+            ))}
+            <g className="axis-y" transform={`translate(0, 0)`}>
+              {[0, 10, 20, 30, 40, 50].map((tick) => (
+                <g key={tick} transform={`translate(0, ${yScale(tick)})`}>
+                  <line x2={width} stroke="currentColor" strokeDasharray="2,2" />
+                  <text x="-9" dy="0.32em" textAnchor="end" fill="currentColor" fontSize="10">
+                    {tick}
+                  </text>
+                </g>
+              ))}
+            </g>
+            <g className="axis-x" transform={`translate(0, ${height})`}>
+              {photosynthesisData.map((point, index) => (
+                <g key={index} transform={`translate(${xScale(index)}, 0)`}>
+                  <line y2="6" stroke="currentColor" />
+                  <text y="9" dy="0.71em" textAnchor="middle" fill="currentColor" fontSize="10">
+                    {point.day}
+                  </text>
+                </g>
+              ))}
+            </g>
+          </g>
+        </svg>
+        {tooltip.visible && (
+          <div
+            className="absolute text-xs p-2 rounded shadow-lg"
+            style={{
+              top: tooltip.y,
+              left: tooltip.x,
+              backgroundColor: 'rgba(200, 255, 200, 0.8)',
+              border: '1px solid rgba(100, 200, 100, 0.8)',
+            }}
+          >
+            <div>{tooltip.data.day}일</div>
+            <div>{tooltip.data.value.toFixed(2)} μmol m⁻² s⁻¹</div>
+          </div>
+        )}
+        <div className="text-center mt-4 text-sm text-gray-700 dark:text-gray-300">
+          <p>가장 높은 평균 광합성량: {maxPhotosynthesis.day}일 - {maxPhotosynthesis.value.toFixed(2)} μmol m⁻² s⁻¹</p>
+        </div>
+      </div>
     </div>
   );
 }

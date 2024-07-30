@@ -1,18 +1,40 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
+import axios from "axios";
 import Sidebar from '../partials/Sidebar';
 import Header from '../partials/Header';
-import FilterButton from '../components/DropdownFilter';
-import Datepicker from '../components/Datepicker';
-
 import CurrentTemperature from '../partials/home_now/CurrentTemperature';
 import CurrentHumidity from '../partials/home_now/CurrentHumidity';
-
 import Banner from '../partials/Banner';
 
 function Dashboard() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [temperatureData, setTemperatureData] = useState([]);
+  const [humidityData, setHumidityData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get('http://192.168.0.21:8000/temperature-humidity');
+        setMessage("연결 성공");
+        setTemperatureData(response.data.temperature);
+        setHumidityData(response.data.humidity);
+        console.log(response.data);
+        setError(false);
+      } catch (error) {
+        setMessage("연결 실패");
+        setError(true);
+        console.error("Error:", error);
+      }
+      setIsLoading(false);
+    };
+
+    fetchData();
+  }, []);
 
   const toggleTooltip = () => {
     setShowTooltip(!showTooltip);
@@ -20,19 +42,12 @@ function Dashboard() {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      {/* Sidebar */}
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-
-      {/* Content area */}
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-        {/*  Site header */}
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-
         <main className="grow">
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-            {/* Dashboard actions */}
             <div className="sm:flex sm:justify-between sm:items-center mb-8">
-              {/* Left: Title */}
               <div className="mb-4 sm:mb-0 flex items-center">
                 <h1 className="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold flex items-center">
                   실시간 온습도
@@ -61,16 +76,16 @@ function Dashboard() {
               </div>
             </div>
 
-            {/* Cards */}
-            <div className="grid grid-cols-12 gap-6">
-              {/* Line chart (Real Time Value) */}
-              <CurrentTemperature />
-              {/* Doughnut chart (Top Countries) */}
-              <CurrentHumidity />
+            <div className="flex flex-wrap justify-between gap-4 px-4 py-6">
+              <div className="flex-1 min-w-[300px]">
+                <CurrentTemperature temp={temperatureData} />
+              </div>
+              <div className="flex-1 min-w-[300px]">
+                <CurrentHumidity humidity={humidityData} />
+              </div>
             </div>
           </div>
         </main>
-
         <Banner />
       </div>
     </div>
