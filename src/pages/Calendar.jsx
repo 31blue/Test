@@ -5,6 +5,7 @@ import CalendarMain from '../partials/calendar/CalendarMain';
 import CalendarWatering from '../partials/calendar/CalendarWatering';
 import CalendarFlower from '../partials/calendar/CalendarFlower';
 import Banner from '../partials/Banner';
+import axios from 'axios';
 
 function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -12,6 +13,29 @@ function Dashboard() {
   const [floweringDates, setFloweringDates] = useState([]);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [showTooltip, setShowTooltip] = useState(false);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  // const [plantProfiles, setPlantProfiles] = useState([]);
+  // const [activeProfileId, setActiveProfileId] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('/watering-history/1', {
+          withCredentials: true
+        });
+        // setPlantProfiles(response.data);
+        console.log(response.data)
+        // setActiveProfileId(response.data[0]?.id || null);
+        setIsLoading(false);
+      } catch (err) {
+        setError('Failed to fetch plant data');
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentDate(new Date()), 1000);
@@ -20,7 +44,9 @@ function Dashboard() {
 
   const handleWatering = (date) => {
     const dateString = date.toDateString();
+    console.log(date)
     if (wateredDates.includes(dateString)) {
+      console.log(wateredDates)
       setWateredDates(wateredDates.filter(d => d !== dateString));
     } else {
       setWateredDates([...wateredDates, dateString]);

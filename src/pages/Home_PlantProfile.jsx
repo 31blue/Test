@@ -26,6 +26,7 @@ function Dashboard() {
           withCredentials: true
         });
         setPlantProfiles(response.data);
+        console.log(response.data)
         setActiveProfileId(response.data[0]?.id || null);
         setIsLoading(false);
       } catch (err) {
@@ -45,7 +46,7 @@ function Dashboard() {
     );
 
     try {
-      await axios.post(`http://192.168.0.21:8000/update-name`, { id, name: newName });
+      await axios.put(`http://192.168.0.21:8000/update-profile/${id}`, { id, plant_profile_name: newName });
     } catch (error) {
       console.error('Failed to update name in database', error);
     }

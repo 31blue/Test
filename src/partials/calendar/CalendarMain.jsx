@@ -7,7 +7,7 @@ function CalendarMain({ currentDate, wateredDates, floweringDates, onWatering, o
 
   const year = displayDate.getFullYear();
   const month = displayDate.getMonth();
-
+  
   const firstDay = new Date(year, month, 1);
   const lastDay = new Date(year, month + 1, 0);
 
