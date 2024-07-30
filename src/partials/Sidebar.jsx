@@ -876,7 +876,7 @@ function Sidebar({
                     <path d="M6 10h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1 0-1zm0-2h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1 0-1zm0-2h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1 0-1z"/>
                   </svg>
                   <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                    테스트용
+                    관리
                   </span>
                 </div>
               </div>

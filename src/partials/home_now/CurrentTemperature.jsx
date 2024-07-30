@@ -20,7 +20,7 @@ function CurrentTemperature({ temp }) {
 
   useEffect(() => {
     if (temp && temp.length > 0) {
-      const newTemp = parseFloat(temp[0]);
+      const newTemp = parseFloat(temp[counter % temp.length]);
       setCurrentTemp(newTemp);
       setTempData(prevData => {
         const newData = [...prevData, { time: new Date(), temp: newTemp }];

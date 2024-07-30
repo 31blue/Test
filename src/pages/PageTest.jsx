@@ -3,6 +3,7 @@ import axios from "axios";
 import Sidebar from '../partials/Sidebar';
 import Header from '../partials/Header';
 
+import SystemControl from '../partials/pagetest/SystemControl';
 import DashboardCard11 from '../partials/pagetest/DashboardCard11';
 import DashboardCard12 from '../partials/pagetest/DashboardCard12';
 import CurrentTemperature from '../partials/home_now/CurrentTemperature';
@@ -80,6 +81,7 @@ function Dashboard() {
             </div>
 
             <div className="flex flex-wrap justify-between gap-4 px-4 py-6">
+              <SystemControl />
               <div className="flex-1 min-w-[300px]">
                 <CurrentTemperature temp={temperatureData} />
               </div>

@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import Sidebar from '../partials/Sidebar';
 import Header from '../partials/Header';
+
 import CurrentTemperature from '../partials/home_now/CurrentTemperature';
 import CurrentHumidity from '../partials/home_now/CurrentHumidity';
+
 import Banner from '../partials/Banner';
 
 function Dashboard() {
@@ -12,8 +14,8 @@ function Dashboard() {
   const [error, setError] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
-  const [temperatureData, setTemperatureData] = useState([]);
-  const [humidityData, setHumidityData] = useState([]);
+  const [temperatureData, setTemperatureData] = useState(null);
+  const [humidityData, setHumidityData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {

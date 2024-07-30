@@ -20,7 +20,7 @@ function CurrentHumidity({ humidity }) {
 
   useEffect(() => {
     if (humidity && humidity.length > 0) {
-      const newHumidity = parseFloat(humidity[0]);
+      const newHumidity = parseFloat(humidity[counter % humidity.length]);
       setCurrentHumidity(newHumidity);
       setHumidityData(prevData => {
         const newData = [...prevData, { time: new Date(), humidity: newHumidity }];
@@ -31,10 +31,10 @@ function CurrentHumidity({ humidity }) {
   }, [counter, humidity]);
 
   const progressPercentage = ((currentHumidity - minHumidity) / (maxHumidity - minHumidity)) * 100;
-  const circumference = 2 * Math.PI * 48.6;
+  const circumference = 2 * Math.PI * 48.6; // 0.8 * 0.9 * 67.5
   const strokeDashoffset = circumference - (progressPercentage / 100) * circumference;
 
-  const svgWidth = 600;
+  const svgWidth = 600; // Reduced the width to half
   const svgHeight = 600;
   const margin = { top: 20, right: 20, bottom: 30, left: 50 };
   const width = svgWidth - margin.left - margin.right;

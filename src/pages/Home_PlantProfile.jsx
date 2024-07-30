@@ -8,7 +8,6 @@ import PlantSpecies from '../partials/home_plantprofile/PlantSpecies';
 import PlantPhysical from '../partials/home_plantprofile/PlantPhysical';
 import Banner from '../partials/Banner';
 
-
 axios.defaults.baseURL = 'http://192.168.0.21:8000';
 axios.defaults.withCredentials = true;
 
@@ -27,7 +26,7 @@ function Dashboard() {
           withCredentials: true
         });
         setPlantProfiles(response.data);
-        setActiveProfileId(response.data[0]?.id || null); // Set the first profile as active
+        setActiveProfileId(response.data[0]?.id || null);
         setIsLoading(false);
       } catch (err) {
         setError('Failed to fetch plant data');
@@ -47,10 +46,8 @@ function Dashboard() {
 
     try {
       await axios.post(`http://192.168.0.21:8000/update-name`, { id, name: newName });
-      // 성공 메시지 표시
     } catch (error) {
       console.error('Failed to update name in database', error);
-      // 에러 메시지 표시
     }
   };
 
@@ -58,15 +55,21 @@ function Dashboard() {
     setShowTooltip(!showTooltip);
   };
 
-  const activeProfile = plantProfiles.find(profile => profile.id === activeProfileId);
+  const activeProfile = plantProfiles.find(profile => profile.id === activeProfileId) || {
+    id: null,
+    plant_register: '',
+    plant_profile_name: '기본 이름',
+    plant_profile_photo: '',
+    physical_properties: {}
+  };
 
   return (
     <div className="flex h-screen overflow-hidden">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-      
+
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        
+
         <main className="grow">
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
             <div className="sm:flex sm:justify-between sm:items-center mb-8">
@@ -106,27 +109,25 @@ function Dashboard() {
                 </h1>
               </div>
             </div>
-            
+
             <div className="grid grid-cols-12 gap-6">
-              {activeProfile && (
-                <PlantProfile 
-                  plantData={activeProfile} 
-                  updatePlantName={updatePlantName} 
-                  id={activeProfile.id}
-                  profiles={plantProfiles}
-                  setActiveProfileId={setActiveProfileId}
-                />
-              )}
+              <PlantProfile 
+                plantData={activeProfile} 
+                updatePlantName={updatePlantName} 
+                id={activeProfile.id}
+                profiles={plantProfiles}
+                setActiveProfileId={setActiveProfileId}
+              />
               <PlantSpecies />
-              {activeProfile && <PlantRegistration date={activeProfile.plant_register} />}
-              {activeProfile && <PlantPhysical plantData={activeProfile} />}
+              <PlantRegistration date={activeProfile.plant_register} />
+              <PlantPhysical plantData={activeProfile} />
             </div>
 
             {isLoading && <div>Loading...</div>}
             {error && <div className="text-red-500">{error}</div>}
           </div>
         </main>
-        
+
         <Banner />
       </div>
     </div>
