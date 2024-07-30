@@ -15,7 +15,7 @@ function CurrentTemperature() {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get('http://221.160.142.241:9000/test');
+        const response = await axios.get('http://221.160.142.241:9000/home/temperature-humidity');
         setMessage("연결 성공");
         setData(response.data);
         console.log(response.data);
