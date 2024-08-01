@@ -26,7 +26,6 @@ function Dashboard() {
           withCredentials: true
         });
         setPlantProfiles(response.data);
-        console.log(response.data)
         setActiveProfileId(response.data[0]?.id || null);
         setIsLoading(false);
       } catch (err) {

@@ -11,7 +11,7 @@ function PlantProfile({ plantData, updatePlantName, profiles, setActiveProfileId
   useEffect(() => {
     if (plantData) {
       const { plant_register, plant_profile_name, plant_profile_photo } = plantData;
-      setImgSrc(plant_profile_photo || defaultImage);
+      setImgSrc(`data:image/jpeg;base64,${plant_profile_photo}` || defaultImage);
       setName(plant_profile_name || '바질01');
 
       if (plant_register) {

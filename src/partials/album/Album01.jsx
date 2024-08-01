@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-// formatDate 함수를 컴포넌트 외부로 이동
-const formatDate = (dateStr) => {
-  if (!dateStr) return '날짜 정보 없음';
-  const year = dateStr.slice(0, 4);
-  const month = dateStr.slice(4, 6);
-  const day = dateStr.slice(6, 8);
-  return `${year}년 ${month}월 ${day}일`;
-};
+// // formatDate 함수를 컴포넌트 외부로 이동
+// const formatDate = (dateStr) => {
+//   console.log(dateStr)
+//   if (!dateStr) return '날짜 정보 없음';
+//   const year = dateStr.slice(0, 4);
+//   const month = dateStr.slice(4, 6);
+//   const day = dateStr.slice(6, 8);
+//   return `${year}년 ${month}월 ${day}일`;
+// };
 
 // ImageModal 컴포넌트
 function ImageModal({ image, onClose }) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50" onClick={onClose}>
       <div className="max-w-3xl max-h-full p-4 bg-white rounded-lg" onClick={(e) => e.stopPropagation()}>
-        <img src={image.src} alt={`사진 ${image.id}`} className="max-w-full max-h-[80vh] object-contain" />
+        <img src={image.picture} alt={`사진 ${image.id}`} className="max-w-full max-h-[80vh] object-contain" />
         <div className="mt-4 text-center">
-          <p className="text-gray-800">{formatDate(image.date)}</p>
+          <p className="text-gray-800">{image.date}</p>
           <button 
             onClick={onClose} 
             className="mt-2 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
@@ -36,24 +38,23 @@ function Album01() {
 
   useEffect(() => {
     const loadImages = async () => {
-      const imageModules = import.meta.glob('../../images/test/*.png');
+      const response = await axios.get("http://192.168.0.21:8000/get/pictures")
       const imageList = [];
 
-      for (const path in imageModules) {
-        const mod = await imageModules[path]();
-        const fileName = path.split('/').pop();
-        const [id, dateStr] = fileName.split('_');
-        const date = dateStr ? dateStr.split('.')[0] : null;
+      for (const image of response.data) {
+        const { id, createAt, picture, filename } = image;
+        const fileName = filename.split('/').pop();
+        const date = createAt;
+        const responsePicture = `data:image/jpeg;base64,${picture}`;
         
         imageList.push({
-          src: mod.default,
           name: fileName,
           id: id,
-          date: date
+          date: date,
+          picture: responsePicture
         });
       }
-
-      setImages(imageList.sort((a, b) => a.id.localeCompare(b.id)));
+      setImages(imageList);
     };
 
     loadImages();
@@ -85,9 +86,9 @@ function Album01() {
             className="w-full h-32 bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden flex items-center justify-center relative group cursor-pointer"
             onClick={() => handleImageClick(image)}
           >
-            <img src={image.src} alt={`사진 ${image.id}`} className="w-full h-full object-cover"/>
+            <img src={image.picture} alt={`사진 ${image.id}`} className="w-full h-full object-cover"/>
             <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <span className="text-white text-center whitespace-pre-line">{formatDate(image.date)}</span>
+              <span className="text-white text-center whitespace-pre-line">{image.date}</span>
             </div>
           </div>
         ))}
