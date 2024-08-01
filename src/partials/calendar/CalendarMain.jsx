@@ -33,6 +33,7 @@ function CalendarMain({ currentDate, wateredDates, floweringDates, onWatering, o
       onWatering(selectedDate);
       setSelectedDate(null);
     }
+    window.location.reload();
   };
 
   const handleFlowering = () => {
@@ -42,7 +43,8 @@ function CalendarMain({ currentDate, wateredDates, floweringDates, onWatering, o
     }
   };
 
-  const isWatered = selectedDate && wateredDates.includes(selectedDate.toDateString());
+  const isWatered = selectedDate && wateredDates.some(item => item.checkDate === selectedDate.toDateString());
+  //console.log(wateredDates[6]['checkDate'] === selectedDate.toDateString())
   const isFlowering = selectedDate && floweringDates.includes(selectedDate.toDateString());
 
   const changeMonth = (increment) => {
@@ -146,7 +148,7 @@ function CalendarMain({ currentDate, wateredDates, floweringDates, onWatering, o
               >
                 <div className={isToday ? 'text-green-700 dark:text-green-300 font-bold' : ''}>{day}</div>
                 <div className="flex mt-1">
-                  {date && !isFutureDate && wateredDates.includes(date.toDateString()) && (
+                  {date && !isFutureDate && wateredDates.some(item => item.checkDate === date.toDateString()) && (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"

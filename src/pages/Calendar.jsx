@@ -24,9 +24,12 @@ function Dashboard() {
         const response = await axios.get('/watering-history/1', {
           withCredentials: true
         });
-        // setPlantProfiles(response.data);
         console.log(response.data)
-        // setActiveProfileId(response.data[0]?.id || null);
+        if (!Array.isArray(response.data) || null || undefined) {
+          setWateredDates([]);
+        } else {
+          setWateredDates(response.data)
+        }
         setIsLoading(false);
       } catch (err) {
         setError('Failed to fetch plant data');
@@ -44,12 +47,12 @@ function Dashboard() {
 
   const handleWatering = (date) => {
     const dateString = date.toDateString();
-    console.log(date)
-    if (wateredDates.includes(dateString)) {
-      console.log(wateredDates)
-      setWateredDates(wateredDates.filter(d => d !== dateString));
+    if (wateredDates.some(item => item.checkDate === dateString)) {
+      const itemToRemove = wateredDates.find(item => item.checkDate === dateString);
+      console.log(itemToRemove.id)
+      axios.delete(`watering-checked/delete/${itemToRemove.id}`)
     } else {
-      setWateredDates([...wateredDates, dateString]);
+      axios.post('watering/checked', {"checkDate": dateString})
     }
   };
 

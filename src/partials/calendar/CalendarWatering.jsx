@@ -2,10 +2,17 @@ import React from 'react';
 
 function CalendarWatering({ wateredDates }) {
   const currentDate = new Date();
+  if (!Array.isArray(wateredDates)) {
+    wateredDates = [];
+  }
   const lastWateredDate = wateredDates
-    .map(dateString => new Date(dateString))
-    .filter(date => date <= currentDate)
-    .sort((a, b) => b - a)[0];
+    .map(item => {const date = new Date(item.checkDate);
+          return {date, item}})
+    .filter(({date}) => date <= currentDate)
+    .sort((a, b) => b.date - a.date)
+    .map(({date}) => date)[0];
+
+  // console.log(lastWateredDate.toDateString())
 
   const getDaysSinceWatering = () => {
     if (!lastWateredDate) return null;
