@@ -2,7 +2,9 @@ import React from 'react';
 
 function DailyOxygen({ day_avg_photo, week_avg_O2 }) {
   // 주간 광합성량 평균 계산
-  const avgPhotosynthesis = day_avg_photo.reduce((sum, value) => sum + value, 0) / day_avg_photo.length;
+  const avgPhotosynthesis = Array.isArray(day_avg_photo) && day_avg_photo.length > 0 
+  ? day_avg_photo.reduce((sum, value) => sum + value, 0) / day_avg_photo.length 
+  : 0;
   
   // 값 포맷팅
   const formattedPhotosynthesis = avgPhotosynthesis.toFixed(2);

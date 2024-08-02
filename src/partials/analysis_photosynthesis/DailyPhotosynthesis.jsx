@@ -16,7 +16,9 @@ function DailyPhotosynthesis({ plantData = [] }) {
 
   useEffect(() => {
     const formattedData = formatData(plantData);
-    const data = formattedData.map((value, index) => ({ time: `${23-index}시`, value }));
+    const data = Array.isArray(formattedData) 
+    ? formattedData.map((value, index) => ({ time: `${23 - index}시`, value }))
+    : []; // 빈 배열을 기본값으로 사용
 
     const maxData = data.reduce((max, point) => point.value > max.value ? point : max, { time: '', value: 0 });
 

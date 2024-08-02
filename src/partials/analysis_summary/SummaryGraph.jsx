@@ -31,10 +31,12 @@ function SummaryGraph({ plantData = [] }) {
   useEffect(() => {
     const formattedData = formatData(plantData);
     const dates = getDates();
-    const data = formattedData.map((value, index) => ({
-      day: `${dates[index]}`,
-      value
-    }));
+    const data = Array.isArray(formattedData) && Array.isArray(dates)
+    ? formattedData.map((value, index) => ({
+        day: dates[index] || '', // dates 배열이 짧을 경우 기본값으로 빈 문자열 사용
+        value
+      }))
+    : []; // 빈 배열을 기본값으로 사용
 
     const maxData = data.reduce((max, point) => point.value > max.value ? point : max, { day: '', value: 0 });
 

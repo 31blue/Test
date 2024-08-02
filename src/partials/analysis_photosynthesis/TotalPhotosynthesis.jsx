@@ -22,7 +22,12 @@ const getWeekRange = () => {
 
 function TotalPhotosynthesis({ day_avg_photo, week_avg_O2 }) {
   // 평균 일일 광합성량 계산
-  const avgDailyPhotosynthesis = day_avg_photo.reduce((sum, value) => sum + value, 0) / day_avg_photo.length;
+  if(day_avg_photo === null){
+    day_avg_photo = [1];
+  }
+  const avgDailyPhotosynthesis = Array.isArray(day_avg_photo) && day_avg_photo.length > 0 
+  ? day_avg_photo.reduce((sum, value) => sum + value, 0) / day_avg_photo.length 
+  : 0;
   
   // 주간 총 광합성량 계산 (μmol m⁻² s⁻¹)
   const totalPhotosynthesis = avgDailyPhotosynthesis * 7;
