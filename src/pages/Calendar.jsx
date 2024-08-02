@@ -106,8 +106,10 @@ function Dashboard() {
                 onWatering={handleWatering}
                 onFlowering={handleFlowering}
               />
-              <CalendarWatering wateredDates={wateredDates} />
-              <CalendarFlower floweringDates={floweringDates} />
+              <div className="col-span-full grid grid-cols-12 gap-6">
+                <CalendarWatering wateredDates={wateredDates} />
+                <CalendarFlower floweringDates={floweringDates} />
+              </div>
             </div>
           </div>
         </main>

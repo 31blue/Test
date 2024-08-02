@@ -82,14 +82,16 @@ function Analysis_Photosynthesis() {
                 <>
                   <DailyPhotosynthesis plantData={plantData.hour_avg_photo} />
                   <WeeklyPhotosynthesis plantData={plantData.day_avg_photo} />
-                  <TotalPhotosynthesis 
-                    day_avg_photo={plantData.day_avg_photo} 
-                    week_avg_O2={plantData.week_avg_O2}
-                  />
-                  <DailyOxygen 
-                    day_avg_photo={plantData.day_avg_photo} 
-                    week_avg_O2={plantData.week_avg_O2}
-                  />
+                  <div className="col-span-full grid grid-cols-12 gap-6">
+                    <TotalPhotosynthesis 
+                      day_avg_photo={plantData.day_avg_photo} 
+                      week_avg_O2={plantData.week_avg_O2}
+                    />
+                    <DailyOxygen 
+                      day_avg_photo={plantData.day_avg_photo} 
+                      week_avg_O2={plantData.week_avg_O2}
+                    />
+                  </div>
                 </>
               )}
             </div>

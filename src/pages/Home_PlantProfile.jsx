@@ -109,7 +109,6 @@ function Dashboard() {
                 </h1>
               </div>
             </div>
-
             <div className="grid grid-cols-12 gap-6">
               <PlantProfile 
                 plantData={activeProfile} 
@@ -119,12 +118,17 @@ function Dashboard() {
                 setActiveProfileId={setActiveProfileId}
               />
               <PlantSpecies />
-              <PlantRegistration date={activeProfile.plant_register} />
-              <PlantPhysical plantData={activeProfile} />
+
+              <div className="col-span-full grid grid-cols-12 gap-6">
+                <PlantRegistration date={activeProfile.plant_register} />
+                <PlantPhysical plantData={activeProfile} />
+              </div>
+
             </div>
 
             {isLoading && <div>Loading...</div>}
             {error && <div className="text-red-500">{error}</div>}
+
           </div>
         </main>
 
