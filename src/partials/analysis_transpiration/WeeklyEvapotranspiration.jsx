@@ -106,7 +106,7 @@ function WeeklyEvapotranspiration({ plantData = [] }) {
     <div className="relative col-span-full xl:col-span-8 bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700">
       <header className="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
         <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
-          최근 7일간의 일일 평균 증발산량 ({getDateRange()})
+          최근 7일간의 증발산량 ({getDateRange()})
         </h2>
         <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
           최근 7일간의 일일 평균 증발산량 변화를 확인해보세요!

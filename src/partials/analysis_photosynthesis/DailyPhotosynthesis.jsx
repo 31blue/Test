@@ -93,7 +93,7 @@ function DailyPhotosynthesis({ plantData = [] }) {
     <div className="relative col-span-full xl:col-span-8 bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700">
       <header className="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
         <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
-          어제({getYesterdayDate()})의 광합성량입니다.
+          어제({getYesterdayDate()})의 광합성량
         </h2>
         <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
           가장 활발한 광합성량이 이루어지는 시간대를 확인해보세요!

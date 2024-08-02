@@ -13,7 +13,7 @@ function DailyOxygen({ day_avg_photo, week_avg_O2 }) {
   return (
     <div className="col-span-full sm:col-span-6 xl:col-span-4 bg-green-100 dark:bg-green-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700">
       <header className="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
-        <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">주간 광합성 및 산소 생성량</h2>
+        <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">최근 7일간의 평균 광합성량</h2>
       </header>
       <div className="p-3">
         <div className="flex flex-col items-center">
