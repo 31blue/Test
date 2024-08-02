@@ -859,35 +859,6 @@ function Sidebar({
 
 
 
-            {/* Test */}
-            {/* Test Page */}
-          <li className={`pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] ${pathname.includes("pagetest") && "from-blue-500/[0.12] dark:from-blue-500/[0.24] to-blue-500/[0.04]"}`}>
-            <NavLink
-              end
-              to="/pagetest"
-              className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${
-                pathname.includes("pagetest") ? "" : "hover:text-gray-900 dark:hover:text-white"
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <div className="grow flex items-center">
-                  <svg className={`shrink-0 fill-current ${pathname.includes('pagetest') ? 'text-blue-500' : 'text-gray-400 dark:text-gray-500'}`} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                    <path d="M14.5 0h-13C.673 0 0 .673 0 1.5v13c0 .827.673 1.5 1.5 1.5h13c.827 0 1.5-.673 1.5-1.5v-13c0-.827-.673-1.5-1.5-1.5zm-13 1h13a.5.5 0 0 1 .5.5V4H1V1.5a.5.5 0 0 1 .5-.5zM1 14.5v-9h14v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5z"/>
-                    <path d="M6 10h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1 0-1zm0-2h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1 0-1zm0-2h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1 0-1z"/>
-                  </svg>
-                  <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                    관리
-                  </span>
-                </div>
-              </div>
-            </NavLink>
-          </li>
-
-
-
-
-
-
 
 
             </ul>
