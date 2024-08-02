@@ -111,7 +111,7 @@ function WeeklyPhotosynthesis({ plantData = [] }) {
           최근 7일간의 광합성량 ({getDateRange()})
         </h2>
         <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-          최근 7일간의 평균 광합성량 변화를 확인해보세요!
+          최근 7일간의 일일 광합성량 변화를 확인해보세요!
         </p>
       </header>
       <div className="p-3">
