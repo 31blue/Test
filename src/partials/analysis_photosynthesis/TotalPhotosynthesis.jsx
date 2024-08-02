@@ -30,7 +30,7 @@ function TotalPhotosynthesis({ day_avg_photo, week_avg_O2 }) {
   : 0;
   
   // 주간 총 광합성량 계산 (μmol m⁻² s⁻¹)
-  const totalPhotosynthesis = avgDailyPhotosynthesis * 7;
+  const totalPhotosynthesis = avgDailyPhotosynthesis * 7 -7;
   
   // 주간 총 산소 생성량 계산 (L)
   const totalOxygen = week_avg_O2 * 7;
