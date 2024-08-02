@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import Sidebar from '../partials/Sidebar';
 import Header from '../partials/Header';
+
 import DailyPhotosynthesis from '../partials/analysis_photosynthesis/DailyPhotosynthesis';
 import TotalPhotosynthesis from '../partials/analysis_photosynthesis/TotalPhotosynthesis';
 import WeeklyPhotosynthesis from '../partials/analysis_photosynthesis/WeeklyPhotosynthesis';

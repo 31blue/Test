@@ -1,60 +1,49 @@
 import React from 'react';
-import Tooltip from '../../components/Tooltip';
-import BarChart from '../../charts/BarChart02';
-
-// Import utilities
-import { tailwindConfig } from '../../utils/Utils';
 
 function GrowthChart() {
+  const data = [
+    { date: '7/26', value: 5.00 },
+    { date: '7/27', value: 5.02 },
+    { date: '7/28', value: 5.03 },
+    { date: '7/29', value: 5.05 },
+    { date: '7/30', value: 5.06 },
+    { date: '7/31', value: 5.08 },
+    { date: '8/1', value: 5.10 },
+  ];
 
-  const chartData = {
-    labels: [
-      '12-01-2022', '01-01-2023', '02-01-2023',
-      '03-01-2023', '04-01-2023', '05-01-2023',
-    ],
-    datasets: [
-      // Light blue bars
-      {
-        label: 'Stack 1',
-        data: [
-          6200, 9200, 6600, 8800, 5200, 9200,
-        ],
-        backgroundColor: tailwindConfig().theme.colors.violet[500],
-        hoverBackgroundColor: tailwindConfig().theme.colors.violet[600],
-        barPercentage: 0.7,
-        categoryPercentage: 0.7,
-        borderRadius: 4,
-      },
-      // Blue bars
-      {
-        label: 'Stack 2',
-        data: [
-          -4000, -2600, -5350, -4000, -7500, -2000,
-        ],
-        backgroundColor: tailwindConfig().theme.colors.violet[200],
-        hoverBackgroundColor: tailwindConfig().theme.colors.violet[300],
-        barPercentage: 0.7,
-        categoryPercentage: 0.7,
-        borderRadius: 4,
-      },
-    ],
-  };
+  const maxValue = Math.max(...data.map(item => item.value));
+  const minValue = Math.min(...data.map(item => item.value));
 
   return (
-    <div className="flex flex-col col-span-full sm:col-span-6 bg-white dark:bg-gray-800 shadow-sm rounded-xl">
-      <header className="px-5 py-4 border-b border-gray-100 dark:border-gray-700/60 flex items-center">
-        <h2 className="font-semibold text-gray-800 dark:text-gray-100"> 성장 그래프 </h2>
+    <div className="col-span-full xl:col-span-8 bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700">
+      <header className="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
+        <h2 className="font-semibold text-gray-800 dark:text-gray-100">일주일 성장 그래프 (입면적) </h2>
       </header>
-      <div className="px-5 py-3">
-        <div className="flex items-start">
-          <div className="text-3xl font-bold text-gray-800 dark:text-gray-100 mr-2">+$6,796</div>
-          <div className="text-sm font-medium text-red-700 px-1.5 bg-red-500/20 rounded-full">-34%</div>
+      <div className="p-3">
+        <div className="flex items-start mb-4">
+          <div className="text-3xl font-bold text-gray-800 dark:text-gray-100 mr-2">5.10 cm²</div>
+          <div className="text-sm font-medium text-green-700 px-1.5 bg-green-500/20 rounded-full">+2%</div>
         </div>
-      </div>
-      {/* Chart built with Chart.js 3 */}
-      <div className="grow">
-        {/* Change the height attribute to adjust the chart height */}
-        <BarChart data={chartData} width={595} height={248} />
+        <div className="grow">
+          <svg viewBox="0 0 300 200" className="w-full h-64">
+            {data.map((item, index) => {
+              const barHeight = ((item.value - minValue) / (maxValue - minValue)) * 150;
+              return (
+                <g key={index} transform={`translate(${index * 40 + 30}, 0)`}>
+                  <rect
+                    y={180 - barHeight}
+                    width="30"
+                    height={barHeight}
+                    fill="#10B981"
+                    className="hover:fill-green-600 transition-colors duration-200"
+                  />
+                  <text x="15" y="195" textAnchor="middle" className="text-xs fill-gray-500">{item.date}</text>
+                  <text x="15" y={175 - barHeight} textAnchor="middle" className="text-xs fill-gray-700">{item.value.toFixed(2)}</text>
+                </g>
+              );
+            })}
+          </svg>
+        </div>
       </div>
     </div>
   );

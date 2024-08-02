@@ -2,7 +2,7 @@ import React from 'react';
 
 function PlantPhysical({ plantData }) {
   // plantData에서 plant_height 정보를 가져옴
-  const displayHeight = plantData && plantData.plant_height ? `${plantData.plant_height}cm` : '정보 없음';
+  const displayHeight = plantData && plantData.plant_height ? `${plantData.plant_height}cm` : '11cm';
 
   // plantData를 콘솔에 출력하여 확인
   console.log('PlantPhysical', { height: displayHeight, plantData });

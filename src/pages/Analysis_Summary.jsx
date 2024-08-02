@@ -2,9 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import Sidebar from '../partials/Sidebar';
 import Header from '../partials/Header';
+import GrowthChart from '../partials/analysis_summary/GrowthChart';
 import SummaryGraph from '../partials/analysis_summary/SummaryGraph';
 import SummaryGraph2 from '../partials/analysis_summary/SummaryGraph2';
 import CombinedSummaryGraph from '../partials/analysis_summary/CombinedSummaryGraph';
+
+import SummaryEvaluation from '../partials/analysis_summary/SummaryEvaluation';
 import Banner from '../partials/Banner';
 
 axios.defaults.baseURL = 'http://192.168.0.21:8000';
@@ -63,7 +66,7 @@ function Analysis_Photosynthesis() {
             <div className="sm:flex sm:justify-between sm:items-center mb-8">
               <div className="mb-4 sm:mb-0 flex items-center">
                 <h1 className="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold flex items-center">
-                  광합성량 분석
+                  분석 요약 및 평가
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
@@ -82,6 +85,9 @@ function Analysis_Photosynthesis() {
             <div className="grid grid-cols-12 gap-6">
               {plantData && evapoData && (
                 <>
+
+                  <SummaryEvaluation />
+                  <GrowthChart />
                   <SummaryGraph plantData={plantData.day_avg_photo} />
                   <SummaryGraph2 evapoData={evapoData.day_avg_evapo} />
                 </>
