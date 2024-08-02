@@ -20,10 +20,6 @@ function GrowthChart() {
         <h2 className="font-semibold text-gray-800 dark:text-gray-100">성장 그래프 by 입면적 </h2>
       </header>
       <div className="p-3">
-        <div className="flex items-start mb-4">
-          <div className="text-3xl font-bold text-gray-800 dark:text-gray-100 mr-2">5.10 cm²</div>
-          <div className="text-sm font-medium text-green-700 px-1.5 bg-green-500/20 rounded-full">+2%</div>
-        </div>
         <div className="grow">
           <svg viewBox="0 0 300 200" className="w-full h-64">
             {data.map((item, index) => {
