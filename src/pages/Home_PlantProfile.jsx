@@ -58,7 +58,7 @@ function Dashboard() {
   const activeProfile = plantProfiles.find(profile => profile.id === activeProfileId) || {
     id: null,
     plant_register: '',
-    plant_profile_name: '기본 이름',
+    plant_profile_name: 'Basil001',
     plant_profile_photo: '',
     physical_properties: {}
   };
@@ -102,7 +102,7 @@ function Dashboard() {
                             </ul>
                           </li>
                         </ul>
-                        <p>물리적 특성 중 크기는 객체 인식 기술을 통해 자동으로 측정된 값입니다.</p>
+                        <p>크기는 객체 인식 기술을 통해 하루에 한 번 새로 측정된 값입니다.</p>
                       </div>
                     )}
                   </div>

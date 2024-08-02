@@ -5,18 +5,24 @@ import Header from '../partials/Header';
 import GrowthChart from '../partials/analysis_summary/GrowthChart';
 import SummaryGraph from '../partials/analysis_summary/SummaryGraph';
 import SummaryGraph2 from '../partials/analysis_summary/SummaryGraph2';
-import CombinedSummaryGraph from '../partials/analysis_summary/CombinedSummaryGraph';
-
 import SummaryEvaluation from '../partials/analysis_summary/SummaryEvaluation';
 import Banner from '../partials/Banner';
 
 axios.defaults.baseURL = 'http://192.168.0.21:8000';
 axios.defaults.withCredentials = true;
 
+const defaultPlantData = {
+  day_avg_photo: [4.0, 4.2, 4.3, 4.5, 4.6, 4.8, 5.0],
+};
+
+const defaultEvapoData = {
+  day_avg_evapo: [0.1, 0.2, 0.3, 0.5, 0.6, 0.8, 0.2],
+};
+
 function Analysis_Photosynthesis() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [plantData, setPlantData] = useState(null);
-  const [evapoData, setEvapoData] = useState(null);
+  const [plantData, setPlantData] = useState(defaultPlantData);
+  const [evapoData, setEvapoData] = useState(defaultEvapoData);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -47,6 +53,8 @@ function Analysis_Photosynthesis() {
       } catch (error) {
         setError('데이터 가져오기 실패');
         console.error('Error:', error);
+        setPlantData(defaultPlantData);
+        setEvapoData(defaultEvapoData);
       } finally {
         setIsLoading(false);
       }
@@ -85,7 +93,6 @@ function Analysis_Photosynthesis() {
             <div className="grid grid-cols-12 gap-6">
               {plantData && evapoData && (
                 <>
-
                   <SummaryEvaluation />
                   <GrowthChart />
                   <SummaryGraph plantData={plantData.day_avg_photo} />
@@ -101,28 +108,19 @@ function Analysis_Photosynthesis() {
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div ref={modalRef} className="bg-white p-8 rounded-lg max-w-2xl">
-            <h2 className="text-2xl font-bold mb-4">광합성량 분석 페이지</h2>
+            <h2 className="text-2xl font-bold mb-4">분석 결과 요약 페이지</h2>
             <p className="mb-4">
-              이 페이지는 식물의 광합성 활동을 다양한 관점에서 분석하고 시각화합니다.
+              이 페이지는 식물의 성장과 건강 상태를 종합적으로 분석하고 요약하는 곳입니다.
             </p>
             <ul className="list-disc list-inside mb-4">
-              <li className="mb-2">
-                <strong>일일 광합성량 추이:</strong> 하루 동안의 광합성량 변화를 보여주는 그래프입니다.
-              </li>
-              <li className="mb-2">
-                <strong>주간 총 광합성량 및 산소량:</strong> 일주일 동안의 총 광합성량과 생성된 총 산소량을 보여주는 대시보드입니다.
-              </li>
-              <li className="mb-2">
-                <strong>주간 일별 광합성량 추이:</strong> 일주일 동안의 일별 광합성량 변화를 보여주는 그래프입니다.
-              </li>
-              <li className="mb-2">
-                <strong>일일 평균 산소 방출량:</strong> 일주일의 데이터를 평균 내어 하루 평균 산소 방출량을 보여주는 대시보드입니다.
-              </li>
+              <li className="mb-2">주간 광합성량과 증발산량의 추이를 그래프로 보여줍니다. 이를 통해 식물의 생리활동 패턴을 파악할 수 있습니다.</li>
+              <li className="mb-2">식물 성장 그래프를 통해 시간에 따른 식물의 키, 잎 수, 잎 면적 등의 변화를 확인할 수 있습니다.</li>
+              <li className="mb-2">이러한 데이터를 기반으로 식물이 잘 자라고 있는지, 혹은 문제가 있는지를 평가합니다.</li>
             </ul>
             <p className="mb-4">
-              이 정보들을 통해 식물의 광합성 활동을 종합적으로 분석하고, 식물의 건강 상태와 생장 환경의 적합성을 평가할 수 있습니다.
+              이 정보들을 종합적으로 분석하여 식물의 전반적인 건강 상태와 성장 정도를 평가하고, 필요한 경우 개선을 위한 조언을 제공합니다.
             </p>
-            <button
+            <button 
               onClick={toggleModal}
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             >
