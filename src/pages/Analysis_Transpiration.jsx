@@ -108,9 +108,6 @@ function Analysis_Evapotranspiration() {
               <li className="mb-2">
                 <strong>생리적 활동 지표:</strong> 증발산은 식물의 기공 활동과 직접적으로 연관되어 있어, 식물의 전반적인 생리적 활동을 반영합니다.
               </li>
-              <li className="mb-2">
-                <strong>생장률 예측:</strong> 증발산량은 식물의 생장률과 밀접한 관계가 있어, 향후 생장을 예측하는 데 도움이 됩니다.
-              </li>
             </ul>
             <p className="mb-4">이 페이지에서는 다음과 같은 정보를 제공합니다:</p>
             <ul className="list-disc list-inside mb-4">

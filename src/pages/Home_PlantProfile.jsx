@@ -59,7 +59,7 @@ function Dashboard() {
   const activeProfile = plantProfiles.find(profile => profile.id === activeProfileId) || {
     id: null,
     plant_register: '',
-    plant_profile_name: '기본 이름',
+    plant_profile_name: 'Basil001',
     plant_profile_photo: '',
     physical_properties: {}
   };
@@ -95,22 +95,22 @@ function Dashboard() {
                         <p className="mb-2">식물의 프로필 페이지입니다</p>
                         <br></br>
                         <ul className="list-disc list-inside mb-2">
-                          <li>프로필 사진: 최신 촬영 이미지로 자동 갱신됩니다.</li>
+                          <li>프로필 사진: 최신 촬영 이미지로 매일 자동 갱신됩니다.</li>
                           <li>식물 이름: 사용자 지정 가능하며,
                             <ul className="list-circle list-inside ml-4 mt-1">
                               <li>최대 10자까지 입력 가능</li>
                               <li>한글, 영문자, 숫자만 사용 가능합니다.</li>
+                              <li>수정된 이름은 서버를 통해 DB에 저장됩니다.</li>
                             </ul>
                           </li>
+                          <li>종 : 자세히를 누르면, 해당 식물에 대한 자세한 설명이 제공됩니다.</li>
                         </ul>
-                        <p>물리적 특성 중 크기는 객체 인식 기술을 통해 자동으로 측정된 값입니다.</p>
                       </div>
                     )}
                   </div>
                 </h1>
               </div>
             </div>
-
             <div className="grid grid-cols-12 gap-6">
               <PlantProfile 
                 plantData={activeProfile} 
@@ -120,12 +120,17 @@ function Dashboard() {
                 setActiveProfileId={setActiveProfileId}
               />
               <PlantSpecies />
-              <PlantRegistration date={activeProfile.plant_register} />
-              <PlantPhysical plantData={activeProfile} />
+
+              <div className="col-span-full grid grid-cols-12 gap-6">
+                <PlantRegistration date={activeProfile.plant_register} />
+                <PlantPhysical plantData={activeProfile} />
+              </div>
+
             </div>
 
             {isLoading && <div>Loading...</div>}
             {error && <div className="text-red-500">{error}</div>}
+
           </div>
         </main>
 

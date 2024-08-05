@@ -31,8 +31,8 @@ function SummaryEvaluation() {
   ];
 
   useEffect(() => {
-    // 항상 첫 번째 메시지(잘 자라고 있다는 메시지)를 선택
-    setEvaluationMessage(messages[0]);
+    const randomIndex = Math.floor(Math.random() * messages.length);
+    setEvaluationMessage(messages[randomIndex]);
   }, []);
 
   return (
@@ -44,6 +44,7 @@ function SummaryEvaluation() {
         <div className="flex items-center space-x-4">
           {evaluationMessage.icon}
           <div className="text-lg font-medium text-gray-800 dark:text-gray-100">
+            {/* `dangerouslySetInnerHTML`을 사용하여 문자열의 HTML 태그를 렌더링 */}
             <div dangerouslySetInnerHTML={{ __html: evaluationMessage.text }} />
           </div>
         </div>

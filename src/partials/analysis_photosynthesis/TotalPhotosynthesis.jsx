@@ -30,7 +30,7 @@ function TotalPhotosynthesis({ day_avg_photo, week_avg_O2 }) {
   : 0;
   
   // 주간 총 광합성량 계산 (μmol m⁻² s⁻¹)
-  const totalPhotosynthesis = avgDailyPhotosynthesis * 7;
+  const totalPhotosynthesis = avgDailyPhotosynthesis * 7 -7;
   
   // 주간 총 산소 생성량 계산 (L)
   const totalOxygen = week_avg_O2 * 7;
@@ -41,7 +41,7 @@ function TotalPhotosynthesis({ day_avg_photo, week_avg_O2 }) {
     <div className="col-span-full sm:col-span-6 xl:col-span-4 bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700">
       <div className="px-5 pt-5">
         <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">
-          최근 일주일 간의 합산 수치
+          최근 7일간의 총 광합성량 및 산소량
         </h2>
         <p className="text-xs text-gray-500 italic text-right">
           {start} ~ {end}

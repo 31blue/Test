@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import Sidebar from '../partials/Sidebar';
 import Header from '../partials/Header';
+
 import DailyPhotosynthesis from '../partials/analysis_photosynthesis/DailyPhotosynthesis';
 import TotalPhotosynthesis from '../partials/analysis_photosynthesis/TotalPhotosynthesis';
 import WeeklyPhotosynthesis from '../partials/analysis_photosynthesis/WeeklyPhotosynthesis';
@@ -81,14 +82,16 @@ function Analysis_Photosynthesis() {
                 <>
                   <DailyPhotosynthesis plantData={plantData.hour_avg_photo} />
                   <WeeklyPhotosynthesis plantData={plantData.day_avg_photo} />
-                  <TotalPhotosynthesis 
-                    day_avg_photo={plantData.day_avg_photo} 
-                    week_avg_O2={plantData.week_avg_O2}
-                  />
-                  <DailyOxygen 
-                    day_avg_photo={plantData.day_avg_photo} 
-                    week_avg_O2={plantData.week_avg_O2}
-                  />
+                  <div className="col-span-full grid grid-cols-12 gap-6">
+                    <TotalPhotosynthesis 
+                      day_avg_photo={plantData.day_avg_photo} 
+                      week_avg_O2={plantData.week_avg_O2}
+                    />
+                    <DailyOxygen 
+                      day_avg_photo={plantData.day_avg_photo} 
+                      week_avg_O2={plantData.week_avg_O2}
+                    />
+                  </div>
                 </>
               )}
             </div>
@@ -108,11 +111,12 @@ function Analysis_Photosynthesis() {
               <li className="mb-2">
                 <strong>일일 광합성량 추이:</strong> 하루 동안의 광합성량 변화를 보여주는 그래프입니다.
               </li>
-              <li className="mb-2">
-                <strong>주간 총 광합성량 및 산소량:</strong> 일주일 동안의 총 광합성량과 생성된 총 산소량을 보여주는 대시보드입니다.
-              </li>
+
               <li className="mb-2">
                 <strong>주간 일별 광합성량 추이:</strong> 일주일 동안의 일별 광합성량 변화를 보여주는 그래프입니다.
+              </li>
+              <li className="mb-2">
+                <strong>주간 총 광합성량 및 산소량:</strong> 일주일 동안의 총 광합성량과 생성된 총 산소량을 보여주는 대시보드입니다.
               </li>
               <li className="mb-2">
                 <strong>일일 평균 산소 방출량:</strong> 일주일의 데이터를 평균 내어 하루 평균 산소 방출량을 보여주는 대시보드입니다.

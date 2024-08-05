@@ -780,34 +780,7 @@ function Sidebar({
 
 
 
-              {/* Messages */}
-              <li className={`pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] ${pathname.includes("messages") && "from-green-500/[0.12] dark:from-green-500/[0.24] to-green-500/[0.04]"}`}>
-                <NavLink
-                  end
-                  to="/messages"
-                  className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${
-                    pathname.includes("messages") ? "" : "hover:text-gray-900 dark:hover:text-white"
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="grow flex items-center">
-                      <svg className={`shrink-0 fill-current ${pathname.includes('messages') ? 'text-green-500' : 'text-gray-400 dark:text-gray-500'}`} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                        <path d="M13.95.879a3 3 0 0 0-4.243 0L1.293 9.293a1 1 0 0 0-.274.51l-1 5a1 1 0 0 0 1.177 1.177l5-1a1 1 0 0 0 .511-.273l8.414-8.414a3 3 0 0 0 0-4.242L13.95.879ZM11.12 2.293a1 1 0 0 1 1.414 0l1.172 1.172a1 1 0 0 1 0 1.414l-8.2 8.2-3.232.646.646-3.232 8.2-8.2Z" />
-                        <path d="M10 14a1 1 0 1 0 0 2h5a1 1 0 1 0 0-2h-5Z" />
-                      </svg>
-                      <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                        메세지
-                      </span>
-                    </div>
-                    {/* Badge */}
-                    {messageCount > 0 && (
-                      <div className="flex flex-shrink-0 ml-2">
-                        <span className="inline-flex items-center justify-center h-5 text-xs font-medium text-white bg-green-400 px-2 rounded">{messageCount}</span>
-                      </div>
-                    )}
-                  </div>
-                </NavLink>
-              </li>
+
 
 
 
@@ -855,35 +828,6 @@ function Sidebar({
                 </div>
               </NavLink>
             </li>
-
-
-
-
-            {/* Test */}
-            {/* Test Page */}
-          <li className={`pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] ${pathname.includes("pagetest") && "from-blue-500/[0.12] dark:from-blue-500/[0.24] to-blue-500/[0.04]"}`}>
-            <NavLink
-              end
-              to="/pagetest"
-              className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${
-                pathname.includes("pagetest") ? "" : "hover:text-gray-900 dark:hover:text-white"
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <div className="grow flex items-center">
-                  <svg className={`shrink-0 fill-current ${pathname.includes('pagetest') ? 'text-blue-500' : 'text-gray-400 dark:text-gray-500'}`} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                    <path d="M14.5 0h-13C.673 0 0 .673 0 1.5v13c0 .827.673 1.5 1.5 1.5h13c.827 0 1.5-.673 1.5-1.5v-13c0-.827-.673-1.5-1.5-1.5zm-13 1h13a.5.5 0 0 1 .5.5V4H1V1.5a.5.5 0 0 1 .5-.5zM1 14.5v-9h14v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5z"/>
-                    <path d="M6 10h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1 0-1zm0-2h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1 0-1zm0-2h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1 0-1z"/>
-                  </svg>
-                  <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                    관리
-                  </span>
-                </div>
-              </div>
-            </NavLink>
-          </li>
-
-
 
 
 

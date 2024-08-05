@@ -10,7 +10,7 @@ function TotalEvapotranspiration({ weekAvgEvapo }) {
   return (
     <div className="col-span-full sm:col-span-6 xl:col-span-4 bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700">
       <header className="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
-        <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">주간 총 증발산량 합산</h2>
+        <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">최근 7일간의 총 증발산량</h2>
       </header>
       <div className="p-3">
         <div className="mb-2">
