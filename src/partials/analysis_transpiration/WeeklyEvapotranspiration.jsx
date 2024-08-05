@@ -166,7 +166,7 @@ function WeeklyEvapotranspiration({ plantData = [] }) {
           </div>
         )}
         <div className="text-center mt-4 text-sm text-gray-700 dark:text-gray-300">
-          <p>가장 높은 일일 평균 증발산량: {maxEvapotranspiration.day}일 - {maxEvapotranspiration.value.toFixed(4)} mm/h</p>
+          <p>가장 높은 일일 평균 증발산량: {maxEvapotranspiration.day}일, {maxEvapotranspiration.value.toFixed(4)} mm/h</p>
         </div>
       </div>
     </div>
