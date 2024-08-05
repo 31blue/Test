@@ -66,9 +66,8 @@ function Dashboard() {
                     </svg>
                     {showTooltip && (
                       <div className="absolute left-1/2 transform -translate-x-1/2 top-full mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg p-4 text-sm text-gray-600 z-10 text-justify">
-                        실시간 온습도 정보입니다.<br /><br />
-                        현재 온도와 습도는 실시간으로 업데이트됩니다.<br />
-                        데이터는 매 2초마다 갱신됩니다.
+                        온습도 정보 페이지입니다.<br /><br />
+                        식물의 현재 대기 환경 정보를 제공합니다.<br />
                       </div>
                     )}
                   </div>
