@@ -25,6 +25,7 @@ function Dashboard() {
         const response = await axios.get('/', {
           withCredentials: true
         });
+        console.log(response.data)
         setPlantProfiles(response.data);
         setActiveProfileId(response.data[0]?.id || null);
         setIsLoading(false);

@@ -42,7 +42,7 @@ function Analysis_Photosynthesis() {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get('/photo/3', {
+        const response = await axios.get('/photo/1', {
           withCredentials: true
         });
         setPlantData(response.data);
