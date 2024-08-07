@@ -2,7 +2,8 @@ import React from 'react';
 
 function DailyWaterIntake({ waterAmount = 0.011155380252068756 }) {
   // 소수점 넷째 자리까지 반올림하는 함수
-  const formattedAmount = waterAmount.toFixed(4);
+  const formattedAmount = waterAmount.toFixed(4)
+  console.log(formattedAmount)
   return (
     <div className="col-span-full sm:col-span-6 xl:col-span-4 bg-sky-100 dark:bg-sky-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700">
       <header className="px-5 py-4 border-b border-gray-100 dark:border-gray-700">

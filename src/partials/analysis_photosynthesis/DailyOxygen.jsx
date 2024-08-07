@@ -8,7 +8,7 @@ function DailyOxygen({ day_avg_photo, week_avg_O2 }) {
   
   // 값 포맷팅
   const formattedPhotosynthesis = avgPhotosynthesis.toFixed(2);
-  const formattedOxygen = Number(week_avg_O2).toFixed(2);
+  const formattedOxygen = Number(week_avg_O2).toFixed(2)
 
   return (
     <div className="col-span-full sm:col-span-6 xl:col-span-4 bg-green-100 dark:bg-green-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700">

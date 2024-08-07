@@ -2,6 +2,7 @@ import React from 'react';
 
 function TotalEvapotranspiration({ weekAvgEvapo }) {
   // 주간 총 증발산량 계산 (주간 평균 * 7일)
+  console.log(weekAvgEvapo);
   const totalEvapotranspiration = weekAvgEvapo * 7;
 
   // 값을 소수점 둘째 자리까지 반올림
